@@ -1,0 +1,287 @@
+================================================================================
+                    DATA JOB PORTAL - DEPENDENCIES & REQUIREMENTS
+================================================================================
+
+NOTE: This file follows Python naming convention but contains Node.js dependencies.
+For Python projects, use requirements.txt. For Node.js, dependencies are in 
+package.json files. This file serves as a human-readable dependency reference.
+
+================================================================================
+                            SYSTEM REQUIREMENTS
+================================================================================
+
+Operating System:
+  - Windows 10/11
+  - macOS 10.15+
+  - Linux (Ubuntu 18.04+, Debian 10+, etc.)
+
+Node.js:
+  - Version: 14.0.0 or higher
+  - Recommended: 18.x LTS or 20.x
+  - Download: https://nodejs.org/
+
+NPM:
+  - Version: 6.0.0 or higher
+  - Comes with Node.js installation
+
+Git:
+  - Version: 2.0.0 or higher
+  - Download: https://git-scm.com/
+
+Code Editor:
+  - Visual Studio Code (recommended)
+  - Or any IDE with JavaScript/React support
+
+Browser:
+  - Chrome 90+ (recommended)
+  - Firefox 88+
+  - Safari 14+
+  - Edge 90+
+
+
+================================================================================
+                        FRONTEND DEPENDENCIES
+================================================================================
+Location: package.json (root directory)
+
+Production Dependencies:
+  react: ^18.2.0
+    - React library for building UI
+    - License: MIT
+
+  react-dom: ^18.2.0
+    - React DOM renderer
+    - License: MIT
+
+  react-scripts: 5.0.1
+    - Create React App scripts and configuration
+    - Includes webpack, babel, jest, etc.
+    - License: MIT
+
+  axios: ^1.6.2
+    - HTTP client for API requests
+    - License: MIT
+
+Development Dependencies:
+  @testing-library/react: ^14.1.2
+    - React component testing utilities
+    - License: MIT
+
+  @testing-library/jest-dom: ^6.1.5
+    - Custom Jest matchers for DOM
+    - License: MIT
+
+  @testing-library/user-event: ^14.5.1
+    - User interaction simulation for tests
+    - License: MIT
+
+Optional (for direct Supabase access):
+  @supabase/supabase-js: ^2.38.4
+    - Supabase JavaScript client
+    - License: Apache-2.0
+
+
+================================================================================
+                        BACKEND DEPENDENCIES
+================================================================================
+Location: backend/package.json
+
+Production Dependencies:
+  express: ^4.18.2
+    - Web framework for Node.js
+    - License: MIT
+
+  cors: ^2.8.5
+    - Cross-Origin Resource Sharing middleware
+    - License: MIT
+
+  dotenv: ^16.3.1
+    - Environment variable loader
+    - License: BSD-2-Clause
+
+  @supabase/supabase-js: ^2.38.4
+    - Supabase JavaScript client
+    - License: Apache-2.0
+
+  bcryptjs: ^2.4.3
+    - Password hashing library
+    - License: MIT
+
+  jsonwebtoken: ^9.0.2
+    - JWT token generation and verification
+    - License: MIT
+
+  express-validator: ^7.0.1
+    - Request validation middleware
+    - License: MIT
+
+  axios: ^1.13.2
+    - HTTP client (for external API calls)
+    - License: MIT
+
+Development Dependencies:
+  nodemon: ^3.0.1
+    - Auto-restart server on file changes
+    - License: MIT
+
+  jest: ^29.7.0
+    - JavaScript testing framework
+    - License: MIT
+
+  supertest: ^6.3.4
+    - HTTP assertion library for API testing
+    - License: MIT
+
+  @types/jest: ^29.5.14
+    - TypeScript definitions for Jest
+    - License: MIT
+
+
+================================================================================
+                        EXTERNAL SERVICES
+================================================================================
+
+Supabase:
+  - Database: PostgreSQL (managed)
+  - Authentication: Built-in auth system
+  - Storage: File storage (optional)
+  - Realtime: WebSocket subscriptions
+  - Pricing: Free tier available, paid plans for production
+
+CDN (for production):
+  - Cloudflare (recommended)
+  - AWS CloudFront
+  - Or any CDN service
+
+
+================================================================================
+                        INSTALLATION COMMANDS
+================================================================================
+
+Install Frontend Dependencies:
+  npm install
+
+Install Backend Dependencies:
+  cd backend
+  npm install
+
+Install All Dependencies:
+  npm install
+  cd backend && npm install
+
+
+================================================================================
+                        ENVIRONMENT VARIABLES
+================================================================================
+
+Backend (.env in backend/):
+  SUPABASE_URL=https://your-project.supabase.co
+  SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+  PORT=5000
+  NODE_ENV=development
+  JWT_SECRET=your_jwt_secret (optional)
+
+Frontend (.env in root/):
+  REACT_APP_API_URL=http://localhost:5000/api
+  REACT_APP_SUPABASE_URL=https://your-project.supabase.co
+  REACT_APP_SUPABASE_ANON_KEY=your_anon_key
+  REACT_APP_ENV=development
+
+
+================================================================================
+                        VERSION COMPATIBILITY
+================================================================================
+
+Node.js Compatibility:
+  - Minimum: Node.js 14.x
+  - Recommended: Node.js 18.x LTS
+  - Latest: Node.js 20.x
+
+NPM Compatibility:
+  - Minimum: NPM 6.x
+  - Recommended: NPM 9.x or 10.x
+
+Browser Compatibility:
+  - Modern browsers with ES6+ support
+  - No IE11 support
+
+
+================================================================================
+                        SECURITY REQUIREMENTS
+================================================================================
+
+- HTTPS in production (required)
+- Secure environment variable storage
+- Regular dependency updates
+- Security audit: npm audit
+- Keep Node.js updated
+
+
+================================================================================
+                        PERFORMANCE REQUIREMENTS
+================================================================================
+
+Minimum Server Specs (Development):
+  - CPU: 2 cores
+  - RAM: 4GB
+  - Storage: 10GB free space
+
+Recommended Server Specs (Production):
+  - CPU: 4+ cores
+  - RAM: 8GB+
+  - Storage: 50GB+ SSD
+  - Network: 100Mbps+
+
+
+================================================================================
+                        DEPENDENCY UPDATES
+================================================================================
+
+Check for outdated packages:
+  Frontend: npm outdated
+  Backend: cd backend && npm outdated
+
+Update packages:
+  Frontend: npm update
+  Backend: cd backend && npm update
+
+Security audit:
+  Frontend: npm audit
+  Backend: cd backend && npm audit
+
+Fix security issues:
+  Frontend: npm audit fix
+  Backend: cd backend && npm audit fix
+
+
+================================================================================
+                        ALTERNATIVE PACKAGES
+================================================================================
+
+If you need alternatives:
+
+HTTP Client:
+  - axios (current)
+  - fetch (built-in, no package needed)
+  - node-fetch
+
+Testing:
+  - jest (current)
+  - mocha + chai
+  - vitest
+
+Database:
+  - Supabase/PostgreSQL (current)
+  - MongoDB
+  - MySQL
+
+Authentication:
+  - Supabase Auth (current)
+  - Auth0
+  - Firebase Auth
+
+
+================================================================================
+For installation instructions, see commands-run.txt
+For setup guide, see SETUP_GUIDE.md
+================================================================================

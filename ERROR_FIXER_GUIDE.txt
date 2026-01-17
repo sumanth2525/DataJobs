@@ -1,0 +1,255 @@
+================================================================================
+                    ERROR FIXER AGENT - USER GUIDE
+================================================================================
+
+OVERVIEW
+================================================================================
+
+The Error Fixer Agent is an automated tool that scans your project for common
+errors and attempts to fix them automatically. It checks for:
+
+1. Missing imports
+2. Missing file extensions
+3. Syntax errors
+4. Missing exports
+5. Environment variable issues
+6. Package.json issues
+7. Missing dependencies
+8. React-specific errors
+9. Build errors
+
+
+USAGE
+================================================================================
+
+Run the Error Fixer Agent:
+---------------------------
+
+npm run fix-errors
+
+Or directly:
+  node error-fixer-agent.js
+
+
+WHAT IT FIXES
+================================================================================
+
+Automatic Fixes:
+----------------
+
+1. Missing React Imports
+   - Adds React imports when hooks are used
+   - Adds useState, useEffect, useMemo, useRef imports
+
+2. Missing Environment Files
+   - Creates .env files from .env.example
+   - Creates backend/.env from backend/.env.example
+
+3. Import Extensions
+   - Fixes missing .js extensions in relative imports
+
+4. Syntax Errors
+   - Removes double semicolons
+   - Checks for brace mismatches
+
+5. Missing Exports
+   - Adds export statements to components
+
+6. Dependencies
+   - Installs missing npm packages
+   - Updates package.json if needed
+
+7. ESLint Auto-fix
+   - Runs ESLint with --fix flag
+   - Fixes formatting and style issues
+
+8. Server Export
+   - Ensures server.js exports the app
+
+
+WARNINGS (Not Auto-Fixed):
+---------------------------
+
+1. Missing key props in map()
+2. useEffect dependency warnings
+3. Brace mismatches
+4. Package.json missing dependencies
+
+
+MANUAL FIXES REQUIRED:
+----------------------
+
+1. Logic errors
+2. API connection issues
+3. Database connection problems
+4. Complex syntax errors
+5. Type mismatches
+
+
+EXAMPLE OUTPUT
+================================================================================
+
+============================================================
+  ERROR FIXER AGENT - Starting Scan
+============================================================
+
+ℹ Step 1: Checking environment variables...
+🔧 Created backend/.env from .env.example
+🔧 Created .env from .env.example
+
+ℹ Step 2: Checking package.json files...
+
+ℹ Step 3: Installing/updating dependencies...
+✓ Frontend dependencies installed/updated
+✓ Backend dependencies installed/updated
+
+ℹ Step 4: Scanning source files for errors...
+ℹ Found 45 files to scan
+🔧 Added React imports to src/components/Example.js
+🔧 Fixed import extensions in src/lib/api.js
+
+ℹ Step 5: Running ESLint auto-fix...
+✓ ESLint auto-fix completed
+
+ℹ Step 6: Checking for build errors...
+✓ Build check passed
+
+============================================================
+  SCAN COMPLETE - SUMMARY
+============================================================
+
+✓ Applied 5 fixes:
+  🔧   - Created backend/.env from .env.example
+  🔧   - Created .env from .env.example
+  🔧   - Added React imports to src/components/Example.js
+  🔧   - Fixed import extensions in src/lib/api.js
+  🔧   - ESLint auto-fix completed
+
+✓ All errors fixed successfully!
+
+
+INTEGRATION WITH CI/CD
+================================================================================
+
+Add to package.json scripts:
+  "prebuild": "npm run fix-errors",
+  "prestart": "npm run fix-errors"
+
+This will automatically fix errors before building/starting.
+
+
+ADVANCED USAGE
+================================================================================
+
+Run specific fixes only:
+-------------------------
+
+1. Just check environment:
+   Modify error-fixer-agent.js to only run checkEnvironmentVariables()
+
+2. Just fix imports:
+   Modify to only run fixMissingImports()
+
+3. Just run ESLint:
+   npm run lint-fix
+
+
+CUSTOMIZATION
+================================================================================
+
+Edit error-fixer-agent.js to:
+- Add custom fix functions
+- Change file patterns to scan
+- Modify fix logic
+- Add project-specific fixes
+
+
+LIMITATIONS
+================================================================================
+
+The agent cannot fix:
+- Logic errors
+- Runtime errors
+- API integration issues
+- Database schema problems
+- Complex refactoring needs
+- Test failures (only detects them)
+
+Always review fixes before committing!
+
+
+BEST PRACTICES
+================================================================================
+
+1. Run before committing:
+   npm run fix-errors
+
+2. Review all fixes:
+   Check git diff before committing
+
+3. Test after fixes:
+   npm start
+   npm test
+
+4. Commit fixes separately:
+   git add .
+   git commit -m "Auto-fix: Applied error fixes"
+
+5. Run regularly:
+   Add to pre-commit hook or CI pipeline
+
+
+TROUBLESHOOTING
+================================================================================
+
+Issue: Agent doesn't fix errors
+Solution:
+  - Check if files are writable
+  - Verify file paths are correct
+  - Check for permission issues
+
+Issue: Agent breaks code
+Solution:
+  - Review git diff
+  - Revert if needed: git checkout -- <file>
+  - Report issue with file path
+
+Issue: ESLint not working
+Solution:
+  - Install ESLint: npm install --save-dev eslint
+  - Or skip ESLint step in agent
+
+Issue: Dependencies not installing
+Solution:
+  - Check npm/node version
+  - Run manually: npm install
+  - Check network connection
+
+
+NEXT STEPS
+================================================================================
+
+After running the agent:
+
+1. Review all changes:
+   git diff
+
+2. Test the application:
+   npm start
+   cd backend && npm run dev
+
+3. Run tests:
+   npm test
+   cd backend && npm test
+
+4. Build for production:
+   npm run build
+
+5. Commit fixes:
+   git add .
+   git commit -m "Auto-fix errors"
+
+
+================================================================================
+For more help, check the error-fixer-agent.js source code
+================================================================================

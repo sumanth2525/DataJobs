@@ -1,0 +1,67 @@
+================================================================================
+                    QUICK DEPLOYMENT GUIDE
+================================================================================
+
+DEPLOY FRONTEND TO VERCEL (5 Minutes)
+================================================================================
+
+1. Install Vercel CLI:
+   npm install -g vercel
+
+2. Login:
+   vercel login
+
+3. Deploy:
+   vercel
+
+4. Add Environment Variables in Vercel Dashboard:
+   - REACT_APP_API_URL (your backend URL)
+   - REACT_APP_SUPABASE_URL
+   - REACT_APP_SUPABASE_ANON_KEY
+
+5. Deploy to Production:
+   vercel --prod
+
+
+DEPLOY BACKEND (Choose One)
+================================================================================
+
+Option 1: Railway (Easiest)
+----------------------------
+1. Go to railway.app
+2. New Project → Deploy from GitHub
+3. Root Directory: backend
+4. Add environment variables
+5. Deploy
+
+Option 2: Render
+-----------------
+1. Go to render.com
+2. New Web Service
+3. Connect GitHub repo
+4. Root Directory: backend
+5. Build: npm install
+6. Start: npm start
+7. Add environment variables
+
+Option 3: Keep Backend Local (Development Only)
+-------------------------------------------------
+- Run backend locally: cd backend && npm run dev
+- Update REACT_APP_API_URL to http://localhost:5000/api
+- Only works for local testing
+
+
+IMPORTANT NOTES
+================================================================================
+
+⚠️  Current backend/server.js is a full Express server
+   Vercel works best with serverless functions
+   For full Express server, use Railway/Render
+
+✅ Frontend can deploy directly to Vercel
+   Just run: vercel
+
+✅ Backend should deploy separately
+   Use Railway or Render for Node.js servers
+
+================================================================================

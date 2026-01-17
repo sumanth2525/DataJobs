@@ -1,0 +1,105 @@
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-color);
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: slideUpNav 0.3s ease;
+}
+
+@keyframes slideUpNav {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 6px 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  border-radius: var(--radius-sm);
+  margin: 0 4px;
+}
+
+.mobile-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 0 0 4px 4px;
+  transition: width var(--transition-base);
+}
+
+.mobile-nav-item.active {
+  color: var(--primary);
+}
+
+.mobile-nav-item.active::before {
+  width: 60%;
+}
+
+.mobile-nav-item:active {
+  background-color: var(--bg-secondary);
+  transform: scale(0.9);
+}
+
+.mobile-nav-item i,
+.mobile-nav-item span {
+  pointer-events: none;
+}
+
+.mobile-nav-icon {
+  font-size: 22px;
+  margin-bottom: 4px;
+  transition: transform var(--transition-base);
+}
+
+.mobile-nav-item.active .mobile-nav-icon {
+  transform: scale(1.15);
+}
+
+.mobile-nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  transition: font-weight var(--transition-fast);
+}
+
+.mobile-nav-item.active .mobile-nav-label {
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: flex;
+  }
+}
+
+/* Prevent body scroll when mobile nav is visible */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 70px;
+  }
+}

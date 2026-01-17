@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Access - DataJobPortal</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .url-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            color: #333;
+        }
+        .qr-code {
+            margin: 20px 0;
+        }
+        .instructions {
+            text-align: left;
+            color: #666;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .instructions li {
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Mobile Access</h1>
+        <p>Scan this QR code or use the link below</p>
+        
+        <div class="url-box" id="urlDisplay">Loading...</div>
+        <button class="copy-btn" onclick="copyURL()">Copy URL</button>
+        
+        <div class="qr-code">
+            <img id="qrImage" src="" alt="QR Code" style="max-width: 100%; height: auto;">
+        </div>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ul>
+                <li>Make sure your phone is on the same WiFi network</li>
+                <li>Scan the QR code with your phone camera</li>
+                <li>Or copy and paste the URL in your mobile browser</li>
+                <li>Ensure the React dev server is running</li>
+            </ul>
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        // Get the current hostname and port
+        const protocol = window.location.protocol;
+        const hostname = window.location.hostname;
+        const port = window.location.port || (protocol === 'https:' ? '443' : '80');
+        
+        // For local development, try to detect the actual local IP
+        // This will be the IP that mobile devices should use
+        let appURL = `${protocol}//${hostname}${port && port !== '80' && port !== '443' ? ':' + port : ''}`;
+        
+        // If we're on localhost, try to get the actual IP
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            // Try to get local IP from WebRTC (if available)
+            // Otherwise, user needs to manually enter their IP
+            appURL = 'http://YOUR_LOCAL_IP:3000';
+        }
+        
+        // Update display
+        document.getElementById('urlDisplay').textContent = appURL;
+        
+        // Generate QR code
+        const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(appURL)}`;
+        document.getElementById('qrImage').src = qrCodeURL;
+        
+        function copyURL() {
+            const url = document.getElementById('urlDisplay').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const status = document.getElementById('status');
+                status.textContent = '✅ URL copied to clipboard!';
+                status.className = 'status success';
+                setTimeout(() => {
+                    status.textContent = '';
+                    status.className = '';
+                }, 2000);
+            });
+        }
+        
+        // Try to get local IP using WebRTC
+        function getLocalIP() {
+            return new Promise((resolve) => {
+                const pc = new RTCPeerConnection({
+                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+                });
+                
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                
+                pc.onicecandidate = (ice) => {
+                    if (ice && ice.candidate && ice.candidate.candidate) {
+                        const candidate = ice.candidate.candidate;
+                        const match = candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3})/);
+                        if (match) {
+                            const ip = match[1];
+                            if (ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.')) {
+                                resolve(ip);
+                                pc.close();
+                            }
+                        }
+                    }
+                };
+                
+                setTimeout(() => {
+                    pc.close();
+                    resolve(null);
+                }, 3000);
+            });
+        }
+        
+        // Try to auto-detect IP
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            getLocalIP().then(ip => {
+                if (ip) {
+                    const newURL = `http://${ip}:3000`;
+                    document.getElementById('urlDisplay').textContent = newURL;
+                    const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(newURL)}`;
+                    document.getElementById('qrImage').src = qrCodeURL;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

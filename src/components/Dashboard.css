@@ -1,0 +1,38 @@
+.dashboard {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9fa 0%, #f5f5f5 100%);
+  padding-bottom: 70px; /* Space for mobile nav */
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dashboard-content {
+  padding: 32px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-content {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding-bottom: 70px; /* Space for mobile bottom nav */
+  }
+  
+  .dashboard-content {
+    padding: 16px 12px;
+  }
+}
