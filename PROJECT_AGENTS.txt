@@ -1,0 +1,365 @@
+================================================================================
+                    AGENTS & AUTOMATED TOOLS IN THIS PROJECT
+================================================================================
+
+This document lists all automated agents, scripts, and tools used in the
+Data Job Portal project.
+
+================================================================================
+1. ERROR FIXER AGENT
+================================================================================
+
+File: error-fixer-agent.js
+Type: Automated Code Quality Agent
+Purpose: Automatically detects and fixes common code errors
+
+Features:
+---------
+✅ Missing import detection and fixes
+✅ Unused variable removal
+✅ Syntax error fixes
+✅ Missing export detection
+✅ Environment variable checks
+✅ Package.json validation
+✅ Dependency installation
+✅ ESLint auto-fix integration
+✅ Build verification
+✅ Detailed error reporting
+
+Usage:
+------
+npm run fix-errors
+
+Or:
+node error-fixer-agent.js
+
+What it fixes:
+-------------
+- Missing React imports (useState, useEffect, etc.)
+- Unused variables and imports
+- Missing file extensions in imports
+- Double semicolons
+- Missing exports
+- Environment file creation
+- Package.json issues
+
+Documentation:
+--------------
+- ERROR_FIXER_GUIDE.txt (Complete guide)
+- ERROR_FIXER_SUMMARY.txt (Summary)
+
+Integration:
+------------
+Can be integrated into:
+- Pre-commit hooks
+- CI/CD pipelines
+- Development workflow
+- Automated testing
+
+Status: ✅ Active and Working
+
+
+================================================================================
+2. API TESTING AGENT
+================================================================================
+
+File: test-api.js
+Type: Automated API Testing Script
+Purpose: Tests all API endpoints and connections
+
+Features:
+---------
+✅ Health check endpoint testing
+✅ Job API endpoint testing
+✅ Authentication endpoint testing
+✅ RapidAPI integration testing
+✅ Online users endpoint testing
+✅ Messages API testing
+✅ Time-based filtering testing
+✅ Error handling verification
+✅ Connection status reporting
+
+Usage:
+------
+npm run test-api
+
+Or:
+node test-api.js
+
+What it tests:
+--------------
+- GET /api/health
+- GET /api/jobs (with filters)
+- GET /api/jobs?timeFilter=Last%2024%20hours
+- GET /api/rapidapi/jobs/search
+- GET /api/rapidapi/internships/data-roles
+- GET /api/online-users
+- POST /api/auth/register
+- POST /api/auth/login
+
+Status: ✅ Active and Working
+
+
+================================================================================
+3. ONLINE USERS SIMULATION AGENT
+================================================================================
+
+File: src/utils/onlineUsers.js
+Type: Real-time User Count Simulator
+Purpose: Simulates live online user count
+
+Features:
+---------
+✅ Real-time user count updates
+✅ Random count generation (100-2000 range)
+✅ Subscriber pattern for updates
+✅ Automatic updates every 3-5 seconds
+✅ Initial count delivery
+
+Usage:
+------
+Automatically used by Header component
+
+Integration:
+------------
+- Header.js subscribes to online users
+- Updates every 3-5 seconds
+- Displays count in header and menu
+
+API:
+----
+subscribeToOnlineUsers(callback) - Subscribe to updates
+Returns unsubscribe function
+
+Status: ✅ Active and Working
+
+
+================================================================================
+4. JOB URL PARSER AGENT
+================================================================================
+
+File: src/utils/jobUrlParser.js
+Type: Automated Job Data Extractor
+Purpose: Automatically extracts job information from URLs
+
+Features:
+---------
+✅ URL validation
+✅ Company name extraction
+✅ Job title extraction
+✅ Location extraction
+✅ Work type detection (Remote/On-site)
+✅ Experience level detection
+✅ Job board detection (LinkedIn, Indeed, etc.)
+✅ Pattern matching for multiple job boards
+
+Usage:
+------
+Used automatically in Admin component when posting jobs
+
+Functions:
+---------
+- parseJobUrl(url) - Main parsing function
+- detectJobBoard(url) - Detects job board source
+
+Supported Job Boards:
+---------------------
+- LinkedIn
+- Indeed
+- Glassdoor
+- Monster
+- ZipRecruiter
+- Dice
+- SimplyHired
+- Company career pages
+
+Status: ✅ Active and Working
+
+
+================================================================================
+5. LOCAL IP DETECTION SCRIPT
+================================================================================
+
+File: get-local-ip.js
+Type: Network Utility Script
+Purpose: Gets local IP address for mobile access
+
+Features:
+---------
+✅ Local IP detection
+✅ QR code generation for mobile access
+✅ Network interface scanning
+✅ IPv4 address filtering
+
+Usage:
+------
+node get-local-ip.js
+
+Purpose:
+--------
+Helps generate QR codes for mobile device access during development
+
+Status: ✅ Available
+
+
+================================================================================
+6. ESLINT AUTO-FIX AGENT
+================================================================================
+
+File: Integrated into error-fixer-agent.js
+Type: Code Linting Agent
+Purpose: Automatically fixes code style issues
+
+Features:
+---------
+✅ Automatic code formatting
+✅ Style rule enforcement
+✅ Unused variable detection
+✅ Import organization
+✅ Syntax error detection
+
+Usage:
+------
+npm run lint-fix
+
+Or integrated via:
+npm run fix-errors
+
+Configuration:
+--------------
+- Uses react-app ESLint config
+- Defined in package.json
+
+Status: ✅ Active and Working
+
+
+================================================================================
+7. JEST TESTING AGENTS
+================================================================================
+
+Files:
+------
+- Frontend: src/__tests__/
+- Backend: backend/__tests__/
+
+Type: Automated Test Runners
+Purpose: Run unit and integration tests
+
+Features:
+---------
+✅ Component testing (React Testing Library)
+✅ API endpoint testing (Supertest)
+✅ Utility function testing
+✅ Mock data generation
+✅ Coverage reporting
+
+Usage:
+------
+# Frontend tests
+npm test
+
+# Backend tests
+cd backend && npm test
+
+# Watch mode
+npm test -- --watch
+
+Test Files:
+-----------
+Frontend:
+- App.test.js
+- Header.test.js
+- Login.test.js
+- api.test.js
+- timeUtils.test.js
+- jobUrlParser.test.js
+
+Backend:
+- server.test.js
+- setup.test.js
+
+Status: ✅ Active and Working
+
+
+================================================================================
+8. BUILD AGENT (React Scripts)
+================================================================================
+
+Type: Build Automation
+Purpose: Compiles React app for production
+
+Features:
+---------
+✅ Code minification
+✅ Asset optimization
+✅ Bundle splitting
+✅ Source maps generation
+✅ PWA manifest generation
+
+Usage:
+------
+npm run build
+
+Output:
+-------
+build/ directory with optimized production files
+
+Status: ✅ Active and Working
+
+
+================================================================================
+SUMMARY
+================================================================================
+
+Total Agents/Scripts: 8
+
+Active Agents:
+--------------
+1. ✅ Error Fixer Agent
+2. ✅ API Testing Agent
+3. ✅ Online Users Simulator
+4. ✅ Job URL Parser
+5. ✅ Local IP Detection
+6. ✅ ESLint Auto-Fix
+7. ✅ Jest Testing Agents
+8. ✅ Build Agent
+
+All agents are:
+- ✅ Documented
+- ✅ Tested
+- ✅ Integrated into workflow
+- ✅ Ready for production use
+
+================================================================================
+INTEGRATION WORKFLOW
+================================================================================
+
+Development Workflow:
+--------------------
+1. Write code
+2. Run: npm run fix-errors (Error Fixer Agent)
+3. Run: npm test (Jest Testing Agents)
+4. Run: npm run test-api (API Testing Agent)
+5. Run: npm run build (Build Agent)
+6. Deploy
+
+Pre-commit Hook (Recommended):
+-------------------------------
+Add to package.json:
+  "precommit": "npm run fix-errors && npm test"
+
+CI/CD Integration:
+-----------------
+All agents can be integrated into:
+- GitHub Actions
+- GitLab CI
+- Jenkins
+- CircleCI
+- Travis CI
+
+================================================================================
+For detailed documentation on each agent, see:
+- ERROR_FIXER_GUIDE.txt
+- test-cases.txt
+- api.txt
+================================================================================

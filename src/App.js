@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 import Dashboard from './components/Dashboard';
 import Admin from './components/Admin';
@@ -141,6 +142,7 @@ function App() {
           onClose={() => setShowSignUp(false)}
         />
       )}
+      <Analytics />
     </div>
   );
 }
