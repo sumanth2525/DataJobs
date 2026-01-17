@@ -23,6 +23,7 @@
     "eject": "react-scripts eject",
     "test-api": "node test-api.js",
     "fix-errors": "node error-fixer-agent.js",
+    "fix-issues": "node issue-fixer-agent.js",
     "lint-fix": "npx eslint --fix \"src/**/*.js\" \"backend/**/*.js\" --ext .js"
   },
   "eslintConfig": {
