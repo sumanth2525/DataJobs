@@ -21,7 +21,9 @@ api.interceptors.request.use((config) => {
 
 // Handle response errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       // Unauthorized - clear token and redirect to login
@@ -74,6 +76,18 @@ export const jobsAPI = {
   // Delete job
   delete: async (id) => {
     const response = await api.delete(`/jobs/${id}`);
+    return response.data;
+  },
+
+  // Scrape job details from URL using ChatGPT
+  scrapeJob: async (url) => {
+    const response = await api.post('/scrape-job', { url });
+    return response.data;
+  },
+
+  // Bulk create jobs from external APIs
+  bulkCreate: async (jobs) => {
+    const response = await api.post('/jobs/bulk', { jobs });
     return response.data;
   },
 };
@@ -146,11 +160,96 @@ export const messagesAPI = {
 
 // ==================== INTERNSHIPS API ====================
 
-
 export const internshipsAPI = {
   // Get data-related internships
   getDataInternships: async () => {
     const response = await api.get('/rapidapi/internships/data-roles');
+    return response.data;
+  },
+};
+
+// ==================== SERPAPI (Google Jobs) ====================
+
+export const serpAPI = {
+  // Search Google Jobs via SerpAPI
+  searchJobs: async (params = {}) => {
+    const queryParams = new URLSearchParams();
+    
+    if (params.q) queryParams.append('q', params.q);
+    if (params.location) queryParams.append('location', params.location);
+    if (params.next_page_token) queryParams.append('next_page_token', params.next_page_token);
+    if (params.num !== undefined) queryParams.append('num', params.num);
+    if (params.engine) queryParams.append('engine', params.engine);
+    if (params.lrad) queryParams.append('lrad', params.lrad);
+    if (params.hl) queryParams.append('hl', params.hl);
+    if (params.gl) queryParams.append('gl', params.gl);
+    
+    const response = await api.get(`/serpapi/jobs/search?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Get job details by SerpAPI ID
+  getJobDetails: async (id) => {
+    const response = await api.get(`/serpapi/jobs/${id}`);
+    return response.data;
+  },
+
+  // Get data-related roles from Google Jobs via SerpAPI
+  getDataRoles: async (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.location) queryParams.append('location', params.location);
+    if (params.num !== undefined) queryParams.append('num', params.num);
+    
+    const response = await api.get(`/serpapi/jobs/data-roles?${queryParams.toString()}`);
+    return response.data;
+  },
+};
+
+// ==================== ADZUNA API ====================
+
+export const adzunaAPI = {
+  // Search jobs via Adzuna
+  searchJobs: async (params = {}) => {
+    const queryParams = new URLSearchParams();
+    
+    if (params.what) queryParams.append('what', params.what);
+    if (params.where) queryParams.append('where', params.where);
+    if (params.page) queryParams.append('page', params.page);
+    if (params.results_per_page) queryParams.append('results_per_page', params.results_per_page);
+    if (params.sort_by) queryParams.append('sort_by', params.sort_by);
+    if (params.category) queryParams.append('category', params.category);
+    if (params.salary_min) queryParams.append('salary_min', params.salary_min);
+    if (params.salary_max) queryParams.append('salary_max', params.salary_max);
+    if (params.max_days_old) queryParams.append('max_days_old', params.max_days_old);
+    if (params.full_time !== undefined) queryParams.append('full_time', params.full_time);
+    if (params.part_time !== undefined) queryParams.append('part_time', params.part_time);
+    if (params.contract !== undefined) queryParams.append('contract', params.contract);
+    if (params.permanent !== undefined) queryParams.append('permanent', params.permanent);
+    
+    const response = await api.get(`/adzuna/jobs/search?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Get job details by Adzuna ID
+  getJobDetails: async (id) => {
+    const response = await api.get(`/adzuna/jobs/${id}`);
+    return response.data;
+  },
+
+  // Get data-related roles from Adzuna
+  getDataRoles: async (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.location) queryParams.append('location', params.location);
+    if (params.page) queryParams.append('page', params.page);
+    if (params.results_per_page) queryParams.append('results_per_page', params.results_per_page);
+    
+    const response = await api.get(`/adzuna/jobs/data-roles?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Get job categories
+  getCategories: async () => {
+    const response = await api.get('/adzuna/categories');
     return response.data;
   },
 };

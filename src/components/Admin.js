@@ -99,7 +99,7 @@ const Admin = ({ onJobPost, onNavigate }) => {
       }
     } catch (error) {
       setFetchError('Error fetching job details. Please fill the form manually.');
-      console.error('Error parsing job URL:', error);
+      // console.error('Error parsing job URL:', error); // Removed by Issue Fixer Agent
     } finally {
       setIsFetching(false);
     }

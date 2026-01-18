@@ -12,7 +12,7 @@ const JobCard = ({ job }) => {
     if (job.link) {
       window.open(job.link, '_blank', 'noopener,noreferrer');
     } else {
-      console.log(`Viewing details for: ${job.title} at ${job.company}`);
+      // console.log(`Viewing details for: ${job.title} at ${job.company}`); // Removed by Issue Fixer Agent
       alert(`Viewing details for:\n${job.title}\n${job.company}\n${job.location}\n${job.salary}`);
     }
   };

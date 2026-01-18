@@ -24,7 +24,7 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
     if (section === 'Hiring' && onNavigate) {
       onNavigate('admin');
     } else {
-      console.log(`Navigating to: ${section}`);
+      // console.log(`Navigating to: ${section}`); // Removed by Issue Fixer Agent
       // In a real app, this would navigate to the section or route
       if (section === 'Messages') {
         if (onNavigate) {
@@ -56,7 +56,7 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
     e.preventDefault();
     e.stopPropagation();
     setIsMenuOpen(false);
-    console.log(`${menuItem} clicked`);
+    // console.log(`${menuItem} clicked`); // Removed by Issue Fixer Agent
     // In a real app, this would navigate or open a modal
     if (menuItem === 'Post a Job') {
       if (onNavigate) {

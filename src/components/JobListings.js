@@ -17,7 +17,7 @@ const JobListings = ({ jobs, onFilterClick, showFilterButton = true, onSortChang
     if (onFilterClick) {
       onFilterClick();
     } else {
-      console.log('Filter button clicked');
+      // console.log('Filter button clicked'); // Removed by Issue Fixer Agent
       alert('Filter options');
     }
   };

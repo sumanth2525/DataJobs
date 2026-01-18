@@ -117,7 +117,7 @@ export const parseJobUrl = async (url) => {
       return { ...extractedData, ...response };
     }
   } catch (error) {
-    console.log('Could not fetch additional details:', error);
+    // console.log('Could not fetch additional details:', error); // Removed by Issue Fixer Agent
   }
 
   return extractedData;

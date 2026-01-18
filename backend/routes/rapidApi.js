@@ -51,7 +51,7 @@ router.get('/jobs/search', async (req, res) => {
       count: response.data?.results?.length || 0
     });
   } catch (error) {
-    console.error('RapidAPI search error:', error);
+    // console.error('RapidAPI search error:', error); // Removed by Issue Fixer Agent
     res.status(error.response?.status || 500).json({
       success: false,
       error: error.response?.data?.message || error.message || 'Failed to search jobs'
@@ -73,7 +73,7 @@ router.get('/jobs/:id', async (req, res) => {
       data: response.data
     });
   } catch (error) {
-    console.error('RapidAPI get job error:', error);
+    // console.error('RapidAPI get job error:', error); // Removed by Issue Fixer Agent
     res.status(error.response?.status || 500).json({
       success: false,
       error: error.response?.data?.message || error.message || 'Failed to get job details'
@@ -101,7 +101,7 @@ router.get('/jobs/company/:company', async (req, res) => {
       count: response.data?.results?.length || 0
     });
   } catch (error) {
-    console.error('RapidAPI company jobs error:', error);
+    // console.error('RapidAPI company jobs error:', error); // Removed by Issue Fixer Agent
     res.status(error.response?.status || 500).json({
       success: false,
       error: error.response?.data?.message || error.message || 'Failed to get company jobs'
@@ -199,7 +199,7 @@ router.get('/internships/data-roles', async (req, res) => {
       total: Array.isArray(internshipData) ? internshipData.length : (internshipData.jobs?.length || internshipData.results?.length || internshipData.data?.length || 0)
     });
   } catch (error) {
-    console.error('Internships API error:', error);
+    // console.error('Internships API error:', error); // Removed by Issue Fixer Agent
     res.status(error.response?.status || 500).json({
       success: false,
       error: error.message || 'Failed to fetch internships'

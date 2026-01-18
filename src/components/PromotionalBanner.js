@@ -3,7 +3,7 @@ import './PromotionalBanner.css';
 
 const PromotionalBanner = () => {
   const handleLearnMore = () => {
-    console.log('Learn more clicked');
+    // console.log('Learn more clicked'); // Removed by Issue Fixer Agent
     // In a real app, this would navigate to an about page or open a modal
     alert('Learn more about DataJobPortal!\n\nWe help you find the best data roles:\n- Data Analysts\n- Data Scientists\n- Data Engineers\n- And more!');
   };

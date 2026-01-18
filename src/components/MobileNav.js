@@ -11,7 +11,7 @@ const MobileNav = ({ onNavigate }) => {
     if (item === 'hiring' && onNavigate) {
       onNavigate('admin');
     } else {
-      console.log(`Navigating to: ${item}`);
+      // console.log(`Navigating to: ${item}`); // Removed by Issue Fixer Agent
       // Show feedback for navigation
       const navItem = e.currentTarget;
       navItem.style.transform = 'scale(0.95)';

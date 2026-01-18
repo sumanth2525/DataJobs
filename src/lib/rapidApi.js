@@ -54,7 +54,7 @@ export const rapidApiService = {
         error: null
       };
     } catch (error) {
-      console.error('RapidAPI search error:', error);
+      // console.error('RapidAPI search error:', error); // Removed by Issue Fixer Agent
       return {
         success: false,
         data: null,
@@ -77,7 +77,7 @@ export const rapidApiService = {
         error: null
       };
     } catch (error) {
-      console.error('RapidAPI get job error:', error);
+      // console.error('RapidAPI get job error:', error); // Removed by Issue Fixer Agent
       return {
         success: false,
         data: null,
@@ -106,7 +106,7 @@ export const rapidApiService = {
         error: null
       };
     } catch (error) {
-      console.error('RapidAPI company jobs error:', error);
+      // console.error('RapidAPI company jobs error:', error); // Removed by Issue Fixer Agent
       return {
         success: false,
         data: null,
@@ -142,7 +142,7 @@ export const rapidApiService = {
         };
       }
     } catch (error) {
-      console.error('Internships API error:', error);
+      // console.error('Internships API error:', error); // Removed by Issue Fixer Agent
       return {
         success: false,
         data: null,
