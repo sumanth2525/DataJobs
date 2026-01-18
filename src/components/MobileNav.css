@@ -4,14 +4,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: #ffffff;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #e5e7eb;
   padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.08);
   z-index: 1000;
-  animation: slideUpNav 0.3s ease;
+  animation: slideUpNav 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes slideUpNav {
@@ -53,11 +53,12 @@
 }
 
 .mobile-nav-item.active {
-  color: var(--primary);
+  color: #667eea;
 }
 
 .mobile-nav-item.active::before {
-  width: 60%;
+  width: 50%;
+  background: #667eea;
 }
 
 .mobile-nav-item:active {
@@ -73,22 +74,24 @@
 .mobile-nav-icon {
   font-size: 22px;
   margin-bottom: 4px;
-  transition: transform var(--transition-base);
+  transition: all 0.2s ease;
 }
 
 .mobile-nav-item.active .mobile-nav-icon {
-  transform: scale(1.15);
+  transform: scale(1.1);
+  color: #667EEA;
 }
 
 .mobile-nav-label {
   font-size: 11px;
   font-weight: 600;
   text-align: center;
-  transition: font-weight var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .mobile-nav-item.active .mobile-nav-label {
   font-weight: 700;
+  color: #667EEA;
 }
 
 @media (max-width: 768px) {

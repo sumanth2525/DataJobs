@@ -1,13 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Header from '../../components/Header';
 
-// Mock online users utility
-jest.mock('../../utils/onlineUsers', () => ({
-  subscribeToOnlineUsers: jest.fn((callback) => {
-    callback(1500);
-    return jest.fn(); // unsubscribe function
-  })
+// Mock adminStats
+jest.mock('../../utils/adminStats', () => ({
+  default: {
+    trackPageView: jest.fn()
+  }
 }));
 
 describe('Header Component', () => {
@@ -18,117 +17,130 @@ describe('Header Component', () => {
 
   const defaultProps = {
     onNavigate: mockOnNavigate,
-    user: null,
     onShowLogin: mockOnShowLogin,
     onShowSignUp: mockOnShowSignUp,
-    onLogout: mockOnLogout
+    onLogout: mockOnLogout,
+    user: null,
+    onlineUsers: 100
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
+    window.location.hash = '';
   });
 
-  test('renders logo and navigation links', () => {
+  test('renders header with logo and navigation', () => {
     render(<Header {...defaultProps} />);
     
-    expect(screen.getByText('DataJobPortal')).toBeInTheDocument();
-    expect(screen.getByText('Find job')).toBeInTheDocument();
-    expect(screen.getByText('Messages')).toBeInTheDocument();
-    expect(screen.getByText('Community')).toBeInTheDocument();
+    expect(screen.getByText(/datajobportal/i)).toBeInTheDocument();
+    expect(screen.getByText(/find job/i)).toBeInTheDocument();
+    expect(screen.getByText(/messages/i)).toBeInTheDocument();
+    expect(screen.getByText(/community/i)).toBeInTheDocument();
   });
 
   test('displays online users count', () => {
-    render(<Header {...defaultProps} />);
+    render(<Header {...defaultProps} onlineUsers={150} />);
     
-    expect(screen.getByText(/online/i)).toBeInTheDocument();
+    expect(screen.getByText(/150/i)).toBeInTheDocument();
   });
 
-  test('opens burger menu on click', () => {
-    render(<Header {...defaultProps} />);
+  test('displays user location', () => {
+    render(<Header {...defaultProps} location="New York, NY" />);
     
-    const menuButton = screen.getByLabelText('Menu');
-    fireEvent.click(menuButton);
-    
-    expect(screen.getByText('Login')).toBeInTheDocument();
-    expect(screen.getByText('Sign Up')).toBeInTheDocument();
+    expect(screen.getByText(/new york, ny/i)).toBeInTheDocument();
   });
 
   test('shows login button when user is not logged in', () => {
-    render(<Header {...defaultProps} />);
+    render(<Header {...defaultProps} user={null} />);
     
-    const menuButton = screen.getByLabelText('Menu');
-    fireEvent.click(menuButton);
-    
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByText(/login/i)).toBeInTheDocument();
   });
 
-  test('shows user info when user is logged in', () => {
-    const user = {
+  test('shows user menu when user is logged in', () => {
+    const mockUser = {
       name: 'John Doe',
       email: 'john@example.com'
     };
     
-    render(<Header {...defaultProps} user={user} />);
+    render(<Header {...defaultProps} user={mockUser} />);
     
-    const menuButton = screen.getByLabelText('Menu');
-    fireEvent.click(menuButton);
-    
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+    expect(screen.getByText(/john doe/i)).toBeInTheDocument();
   });
 
-  test('calls onNavigate when clicking Post a Job', () => {
-    render(<Header {...defaultProps} />);
+  test('calls onShowLogin when login button is clicked', () => {
+    render(<Header {...defaultProps} user={null} />);
     
-    const menuButton = screen.getByLabelText('Menu');
-    fireEvent.click(menuButton);
-    
-    const postJobButton = screen.getByText('Post a Job');
-    fireEvent.click(postJobButton);
-    
-    expect(mockOnNavigate).toHaveBeenCalledWith('admin');
-  });
-
-  test('calls onShowLogin when clicking Login', () => {
-    render(<Header {...defaultProps} />);
-    
-    const menuButton = screen.getByLabelText('Menu');
-    fireEvent.click(menuButton);
-    
-    const loginButton = screen.getByText('Login');
+    const loginButton = screen.getByText(/login/i);
     fireEvent.click(loginButton);
     
     expect(mockOnShowLogin).toHaveBeenCalled();
   });
 
-  test('calls onLogout when clicking Logout', () => {
-    const user = { name: 'John Doe', email: 'john@example.com' };
+  test('calls onNavigate when navigation link is clicked', () => {
+    render(<Header {...defaultProps} />);
     
-    render(<Header {...defaultProps} user={user} />);
+    const messagesLink = screen.getByText(/messages/i);
+    fireEvent.click(messagesLink);
     
-    const menuButton = screen.getByLabelText('Menu');
-    fireEvent.click(menuButton);
+    expect(mockOnNavigate).toHaveBeenCalledWith('Messages');
+  });
+
+  test('navigates to admin dashboard when admin button is clicked', () => {
+    render(<Header {...defaultProps} />);
     
-    const logoutButton = screen.getByText('Logout');
+    const adminButton = screen.getByText(/admin dashboard/i);
+    fireEvent.click(adminButton);
+    
+    expect(window.location.hash).toBe('#admin-dashboard');
+  });
+
+  test('calls onLogout when logout is clicked', () => {
+    const mockUser = {
+      name: 'John Doe',
+      email: 'john@example.com'
+    };
+    
+    render(<Header {...defaultProps} user={mockUser} />);
+    
+    // Open user menu first
+    const userMenu = screen.getByText(/john doe/i);
+    fireEvent.click(userMenu);
+    
+    const logoutButton = screen.getByText(/logout/i);
     fireEvent.click(logoutButton);
     
     expect(mockOnLogout).toHaveBeenCalled();
   });
 
-  test('closes menu when clicking outside', () => {
+  test('navigates to dashboard when logo is clicked', () => {
     render(<Header {...defaultProps} />);
     
-    const menuButton = screen.getByLabelText('Menu');
+    const logo = screen.getByText(/datajobportal/i);
+    fireEvent.click(logo);
+    
+    expect(window.location.hash).toBe('');
+  });
+
+  test('toggles mobile menu on mobile devices', () => {
+    window.innerWidth = 768;
+    
+    render(<Header {...defaultProps} />);
+    
+    const menuButton = screen.getByRole('button', { name: /menu/i });
     fireEvent.click(menuButton);
     
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    // Mobile menu should be visible
+    expect(screen.getByText(/find job/i)).toBeInTheDocument();
+  });
+
+  test('tracks page view on navigation', () => {
+    const adminStats = require('../../utils/adminStats').default;
     
-    // Click outside
-    fireEvent.mouseDown(document.body);
+    render(<Header {...defaultProps} />);
     
-    // Menu should close (Login button not visible)
-    waitFor(() => {
-      expect(screen.queryByText('Login')).not.toBeInTheDocument();
-    });
+    const messagesLink = screen.getByText(/messages/i);
+    fireEvent.click(messagesLink);
+    
+    expect(adminStats.trackPageView).toHaveBeenCalled();
   });
 });

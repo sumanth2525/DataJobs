@@ -21,28 +21,23 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
   const handleNavClick = (e, section) => {
     e.preventDefault();
     e.stopPropagation();
-    if (section === 'Hiring' && onNavigate) {
-      onNavigate('admin');
-    } else {
-      // console.log(`Navigating to: ${section}`); // Removed by Issue Fixer Agent
-      // In a real app, this would navigate to the section or route
-      if (section === 'Messages') {
-        if (onNavigate) {
-          onNavigate('messages');
-        } else {
-          window.location.hash = '#messages';
-        }
-      } else if (section === 'Community') {
-        if (onNavigate) {
-          onNavigate('community');
-        } else {
-          window.location.hash = '#community';
-        }
-      } else if (section === 'FAQ') {
-        alert('FAQ section coming soon! ❓');
+    // Navigate to the section or route
+    if (section === 'Messages') {
+      if (onNavigate) {
+        onNavigate('messages');
       } else {
-        alert(`Navigating to ${section} section`);
+        window.location.hash = '#messages';
       }
+    } else if (section === 'Community') {
+      if (onNavigate) {
+        onNavigate('community');
+      } else {
+        window.location.hash = '#community';
+      }
+    } else if (section === 'FAQ') {
+      alert('FAQ section coming soon! ❓');
+    } else {
+      alert(`Navigating to ${section} section`);
     }
   };
 
@@ -56,11 +51,9 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
     e.preventDefault();
     e.stopPropagation();
     setIsMenuOpen(false);
-    // console.log(`${menuItem} clicked`); // Removed by Issue Fixer Agent
-    // In a real app, this would navigate or open a modal
     if (menuItem === 'Post a Job') {
       if (onNavigate) {
-        onNavigate('admin');
+        onNavigate('post-job');
       } else {
         window.location.hash = '#post-job';
       }
@@ -82,6 +75,16 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
       alert('Notifications coming soon! 🔔');
     } else if (menuItem === 'Settings') {
       alert('Settings coming soon! ⚙️');
+    } else if (menuItem === 'Push Job Online') {
+      alert('Push Job Online feature coming soon! 📤');
+    } else if (menuItem === 'Good Job Count') {
+      alert('Good Job Count feature coming soon! ⭐');
+    } else if (menuItem === 'Resume') {
+      alert('Resume feature coming soon! 📄');
+    } else if (menuItem === 'Consultancy') {
+      alert('Consultancy feature coming soon! 💼');
+    } else if (menuItem === 'Contact Us') {
+      alert('Contact Us feature coming soon! 📧');
     } else if (menuItem === 'Logout') {
       if (onLogout) {
         onLogout();
@@ -121,23 +124,36 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
       <div className="header-container">
         <div className="header-left">
           <div className="logo" onClick={handleLogoClick} onKeyDown={handleLogoKeyDown} role="button" tabIndex={0}>
-            <i className="bi bi-graph-up logo-icon"></i>
-            <span className="logo-text">DataJobPortal</span>
+            <div className="logo-icon-circle">
+              <i className="bi bi-briefcase-fill"></i>
+            </div>
+            <span className="logo-text">Talantium</span>
           </div>
           <nav className="nav-links">
-            <a href="#find-job" className="nav-link" onClick={(e) => handleNavClick(e, 'Find Job')}>Find job</a>
-            <a href="#messages" className="nav-link" onClick={(e) => handleNavClick(e, 'Messages')}>Messages</a>
+            <a href="#home" className="nav-link" onClick={(e) => handleNavClick(e, 'Home')}>Home</a>
+            <a href="#messages" className="nav-link nav-link-with-badge" onClick={(e) => handleNavClick(e, 'Messages')}>
+              Messages
+              <span className="nav-badge-dot"></span>
+            </a>
+            <a href="#about" className="nav-link" onClick={(e) => handleNavClick(e, 'About us')}>About us</a>
+            <a href="#jobs" className="nav-link active" onClick={(e) => { e.preventDefault(); if (onNavigate) { onNavigate('dashboard'); } else { window.location.hash = ''; } }}>
+              Jobs
+            </a>
             <a href="#community" className="nav-link" onClick={(e) => handleNavClick(e, 'Community')}>Community</a>
-            <a href="#faq" className="nav-link" onClick={(e) => handleNavClick(e, 'FAQ')}>FAQ</a>
           </nav>
         </div>
         <div className="header-right">
-          <div className="online-users-indicator">
-            <i className="bi bi-circle-fill online-dot"></i>
-            <span className="online-count">{onlineUsersCount.toLocaleString()}</span>
-            <span className="online-label">online</span>
-          </div>
-          <span className="location">New York, NY</span>
+          <button className="header-icon-btn" onClick={(e) => handleMenuClick(e, 'Settings')} aria-label="Settings">
+            <i className="bi bi-gear-fill"></i>
+          </button>
+          <button className="header-icon-btn" onClick={(e) => handleMenuClick(e, 'Notifications')} aria-label="Notifications">
+            <i className="bi bi-bell-fill"></i>
+          </button>
+          <button className="header-avatar-btn" onClick={toggleMenu} aria-label="User menu">
+            <div className="header-avatar">
+              {user && user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+            </div>
+          </button>
           <div className="burger-menu-container" ref={menuRef}>
             <button 
               className={`burger-menu-button ${isMenuOpen ? 'active' : ''}`}
@@ -164,80 +180,41 @@ const Header = ({ onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
                   </div>
                 </div>
                 <div className="menu-divider"></div>
-                {!user ? (
-                  <>
-                    <button 
-                      className="menu-item menu-item-highlight"
-                      onClick={(e) => handleMenuClick(e, 'Login')}
-                    >
-                      <i className="bi bi-box-arrow-in-right"></i>
-                      <span>Login</span>
-                    </button>
-                    <button 
-                      className="menu-item"
-                      onClick={(e) => handleMenuClick(e, 'Sign Up')}
-                    >
-                      <i className="bi bi-person-plus"></i>
-                      <span>Sign Up</span>
-                    </button>
-                    <div className="menu-divider"></div>
-                    <button 
-                      className="menu-item menu-item-highlight"
-                      onClick={(e) => handleMenuClick(e, 'Post a Job')}
-                    >
-                      <i className="bi bi-briefcase-fill"></i>
-                      <span>Post a Job</span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <div className="menu-user-info">
-                      <div className="menu-user-avatar">{user.name ? user.name.charAt(0).toUpperCase() : 'U'}</div>
-                      <div className="menu-user-details">
-                        <div className="menu-user-name">{user.name || 'User'}</div>
-                        <div className="menu-user-email">{user.email || user.loginMethod}</div>
-                      </div>
-                    </div>
-                    <div className="menu-divider"></div>
-                    <button 
-                      className="menu-item menu-item-highlight"
-                      onClick={(e) => handleMenuClick(e, 'Post a Job')}
-                    >
-                      <i className="bi bi-briefcase-fill"></i>
-                      <span>Post a Job</span>
-                    </button>
-                    <div className="menu-divider"></div>
-                    <button 
-                      className="menu-item"
-                      onClick={(e) => handleMenuClick(e, 'Profile')}
-                    >
-                      <i className="bi bi-person-fill"></i>
-                      <span>Profile</span>
-                    </button>
-                    <button 
-                      className="menu-item"
-                      onClick={(e) => handleMenuClick(e, 'Notifications')}
-                    >
-                      <i className="bi bi-bell-fill"></i>
-                      <span>Notifications</span>
-                    </button>
-                    <button 
-                      className="menu-item"
-                      onClick={(e) => handleMenuClick(e, 'Settings')}
-                    >
-                      <i className="bi bi-gear-fill"></i>
-                      <span>Settings</span>
-                    </button>
-                    <div className="menu-divider"></div>
-                    <button 
-                      className="menu-item menu-item-danger"
-                      onClick={(e) => handleMenuClick(e, 'Logout')}
-                    >
-                      <i className="bi bi-box-arrow-right"></i>
-                      <span>Logout</span>
-                    </button>
-                  </>
-                )}
+                <button 
+                  className="menu-item menu-item-highlight"
+                  onClick={(e) => handleMenuClick(e, 'Post a Job')}
+                >
+                  <i className="bi bi-briefcase-fill"></i>
+                  <span>Post a Job</span>
+                </button>
+                <button 
+                  className="menu-item"
+                  onClick={(e) => handleMenuClick(e, 'Push Job Online')}
+                >
+                  <i className="bi bi-upload"></i>
+                  <span>Push Job Online</span>
+                </button>
+                <button 
+                  className="menu-item"
+                  onClick={(e) => handleMenuClick(e, 'Good Job Count')}
+                >
+                  <i className="bi bi-star-fill"></i>
+                  <span>Good Job Count</span>
+                </button>
+                <button 
+                  className="menu-item"
+                  onClick={(e) => handleMenuClick(e, 'Resume')}
+                >
+                  <i className="bi bi-file-earmark-text-fill"></i>
+                  <span>Resume</span>
+                </button>
+                <button 
+                  className="menu-item"
+                  onClick={(e) => handleMenuClick(e, 'Contact Us')}
+                >
+                  <i className="bi bi-envelope-fill"></i>
+                  <span>Contact Us</span>
+                </button>
               </div>
             )}
           </div>

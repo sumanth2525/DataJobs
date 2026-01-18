@@ -1,0 +1,414 @@
+================================================================================
+                      DATA JOB PORTAL - PROJECT DESCRIPTION
+================================================================================
+
+PROJECT NAME: DataJobPortal (Jobright)
+VERSION: 1.0.0
+DESCRIPTION: A modern, responsive job portal platform specialized for data-related roles
+
+================================================================================
+                              PROJECT OVERVIEW
+================================================================================
+
+DataJobPortal is a comprehensive web application designed to help job seekers 
+find data-related positions including Data Analyst, Data Scientist, Data Engineer,
+ETL Developer, Business Intelligence Analyst, and other data-focused roles. The
+platform features a clean, modern design with a three-column layout, AI-powered
+job recommendations, and seamless integration with external job APIs.
+
+================================================================================
+                            KEY FEATURES
+================================================================================
+
+1. JOB LISTINGS & SEARCH
+   - Browse and search data-related job postings
+   - Advanced filtering by location, experience level, salary range, work schedule
+   - Time-based filtering (Latest, Last 24 hours, Last week, Last month)
+   - Sort by salary (High to Low, Low to High) or date
+   - Skill-based filtering with tags
+   - Real-time job count display
+   - Job details with company information, location, salary, tags
+
+2. THREE-COLUMN LAYOUT
+   - Left Sidebar: Navigation menu with Jobs, Resume, Profile, Agent, Coaching
+   - Center Content: Main job listings with filters and search
+   - Right Sidebar: AI Copilot assistant (Orion) for job recommendations
+
+3. RESPONSIVE DESIGN
+   - Desktop: Full three-column layout with sidebars
+   - Tablet: Sidebars hidden, full-width main content
+   - Mobile: Optimized single-column layout with bottom navigation
+   - Touch-friendly interfaces (44px+ touch targets)
+   - Smooth animations and transitions
+   - Mobile filter drawer for easy access
+
+4. AI-POWERED FEATURES
+   - AI Copilot (Orion) for personalized job recommendations
+   - "Ask Orion" functionality on job cards
+   - AI-powered job matching and suggestions
+   - Interactive chat interface with AI assistant
+
+5. USER FEATURES
+   - User authentication (Login/SignUp)
+   - User profiles
+   - Job application tracking (Liked, Applied, External tabs)
+   - Messages/Notifications
+   - Community section
+   - Post jobs functionality
+   - Admin dashboard
+
+6. JOB POSTING
+   - Post new job listings through UI
+   - Automatic job data extraction from URLs
+   - Integration with Supabase database
+   - Job validation and error handling
+
+7. EXTERNAL API INTEGRATION
+   - RapidAPI integration for job listings
+   - Adzuna API integration
+   - Real-time job data synchronization
+   - Background job fetching and updates
+
+================================================================================
+                            TECHNOLOGY STACK
+================================================================================
+
+FRONTEND:
+  - React 18.2.0
+  - React DOM 18.2.0
+  - React Scripts 5.0.1
+  - CSS3 with CSS Variables
+  - Responsive CSS Grid and Flexbox
+
+BACKEND:
+  - Node.js
+  - Express.js
+  - RESTful API architecture
+
+DATABASE:
+  - Supabase (PostgreSQL)
+  - Tables: jobs, messages, users
+  - Row Level Security (RLS) policies
+
+API INTEGRATIONS:
+  - RapidAPI for job listings
+  - Adzuna API for job search
+  - Supabase client library
+
+ANALYTICS:
+  - Vercel Analytics integration
+
+TESTING:
+  - Jest
+  - React Testing Library
+  - User Event Testing Library
+
+DEPLOYMENT:
+  - Vercel (frontend)
+  - Backend server deployment ready
+
+================================================================================
+                        PROJECT STRUCTURE
+================================================================================
+
+src/
+  ├── components/          # React components
+  │   ├── Dashboard.js     # Main dashboard with three-column layout
+  │   ├── Header.js        # Top navigation header
+  │   ├── LeftSidebar.js   # Left navigation sidebar
+  │   ├── RightSidebar.js  # AI Copilot sidebar
+  │   ├── JobCard.js       # Individual job card component
+  │   ├── JobListings.js   # Job listings container
+  │   ├── SearchFilterBar.js # Search and filter bar
+  │   ├── SkillFilters.js  # Skill-based filter pills
+  │   ├── TopTabs.js       # Tab navigation (Recommended, Liked, Applied)
+  │   ├── PostJob.js       # Post new job form
+  │   ├── Profile.js       # User profile component
+  │   ├── Messages.js      # Messages component
+  │   ├── Community.js     # Community section
+  │   ├── Admin.js         # Admin dashboard
+  │   └── MobileNav.js     # Mobile bottom navigation
+  │
+  ├── lib/                 # API and utility libraries
+  │   ├── api.js          # Main API client
+  │   ├── supabase.js     # Supabase client configuration
+  │   └── rapidApi.js     # RapidAPI integration
+  │
+  ├── utils/              # Utility functions
+  │   ├── timeUtils.js    # Time formatting utilities
+  │   ├── jobUrlParser.js # URL parsing for job postings
+  │   └── adminStats.js   # Admin statistics calculations
+  │
+  ├── data/               # Sample data
+  │   ├── jobData.js      # Sample job listings
+  │   └── profileData.js  # Sample profile data
+  │
+  ├── __tests__/          # Test files
+  │   ├── components/     # Component tests
+  │   └── utils/          # Utility tests
+  │
+  └── App.js              # Main application component
+
+backend/
+  ├── server.js           # Express server setup
+  ├── routes/
+  │   ├── rapidApi.js     # RapidAPI route handlers
+  │   └── adzunaApi.js    # Adzuna API route handlers
+  └── __tests__/          # Backend tests
+
+database/
+  ├── SUPABASE_SETUP.sql         # Database schema setup
+  ├── SUPABASE_SIMPLE_SCHEMA.sql # Simplified schema
+  └── VIEW_JOBS.sql              # Database views
+
+scripts/
+  ├── test-api.js         # API testing script
+  ├── test-supabase.js    # Supabase connection test
+  └── check-jobs-count.js # Jobs count checker
+
+public/
+  ├── index.html          # Main HTML template
+  ├── manifest.json       # PWA manifest
+  └── sw.js              # Service worker
+
+================================================================================
+                        DESIGN FEATURES
+================================================================================
+
+COLOR SCHEME:
+  - Primary: #667eea (Purple gradient)
+  - Secondary: #764ba2 (Deep purple)
+  - Success/Accent: #10b981 (Green)
+  - Background: #ffffff, #fafafa
+  - Text: #1a1a1a (Primary), #666 (Secondary)
+
+DESIGN PRINCIPLES:
+  - Clean, modern interface
+  - Consistent green accent color (#10b981) throughout
+  - Smooth transitions and animations
+  - Card-based layouts with shadows
+  - Rounded corners and soft borders
+  - Professional typography with clear hierarchy
+
+RESPONSIVE BREAKPOINTS:
+  - Desktop: > 1024px (Full three-column layout)
+  - Tablet: 769px - 1024px (Sidebars hidden)
+  - Mobile: < 768px (Single column, mobile nav)
+
+UI COMPONENTS:
+  - Job cards with match percentage panels
+  - Filter pills and badges
+  - Action buttons (Like, Dislike, Ask AI, Apply)
+  - Tab navigation
+  - Modal dialogs and drawers
+  - Form inputs with validation
+
+================================================================================
+                        KEY FUNCTIONALITY
+================================================================================
+
+JOB MANAGEMENT:
+  - Fetch jobs from Supabase database
+  - Filter by multiple criteria (location, salary, experience, etc.)
+  - Sort by date or salary
+  - Real-time job count updates
+  - Job detail views with company information
+
+USER AUTHENTICATION:
+  - Login/SignUp functionality
+  - User session management
+  - LocalStorage persistence
+  - User profile management
+
+JOB POSTING:
+  - Post new jobs through UI form
+  - URL parsing for automatic job data extraction
+  - Job validation before submission
+  - Integration with Supabase backend
+
+AI FEATURES:
+  - AI Copilot chat interface
+  - Job recommendations based on preferences
+  - Interactive Q&A about job postings
+  - Personalized job matching
+
+ADMIN DASHBOARD:
+  - Job statistics and analytics
+  - User management
+  - Job moderation
+  - System monitoring
+
+API INTEGRATION:
+  - External job API integration (RapidAPI, Adzuna)
+  - Real-time job data synchronization
+  - Background job fetching
+  - Error handling and fallbacks
+
+================================================================================
+                        DATABASE SCHEMA
+================================================================================
+
+JOBS TABLE:
+  - id (Primary Key)
+  - company (Company name)
+  - title (Job title)
+  - location (Job location)
+  - salary (Salary information)
+  - company_logo (Logo URL)
+  - tags (Array of skill tags)
+  - link (Job posting URL)
+  - description (Job description)
+  - work_location (Remote/Onsite)
+  - experience (Experience level)
+  - working_schedule (Full-time/Part-time)
+  - employment_type (Employment type)
+  - posted_by (User who posted)
+  - created_at (Timestamp)
+  - updated_at (Timestamp)
+
+MESSAGES TABLE:
+  - id (Primary Key)
+  - conversation_id (Conversation identifier)
+  - sender_id (Sender user ID)
+  - receiver_id (Receiver user ID)
+  - message_text (Message content)
+  - is_read (Read status)
+  - created_at (Timestamp)
+
+================================================================================
+                        DEVELOPMENT WORKFLOW
+================================================================================
+
+LOCAL DEVELOPMENT:
+  1. Install dependencies: npm install
+  2. Start backend: cd backend && npm start (Port 5000)
+  3. Start frontend: npm start (Port 3000)
+  4. Access application: http://localhost:3000
+
+TESTING:
+  - Run tests: npm test
+  - Run specific test: npm test -- ComponentName.test.js
+  - Test API: node scripts/test-api.js
+  - Test Supabase: node scripts/test-supabase.js
+
+BUILDING:
+  - Production build: npm run build
+  - Output: build/ directory with optimized files
+
+DEPLOYMENT:
+  - Frontend: Deploy to Vercel
+  - Backend: Deploy Express server
+  - Database: Supabase cloud instance
+
+================================================================================
+                        KEY FEATURES BREAKDOWN
+================================================================================
+
+DASHBOARD:
+  - Three-column responsive layout
+  - Job listings with advanced filters
+  - Search functionality
+  - Time-based and salary sorting
+  - Skill filter pills
+  - Tab navigation (Recommended, Liked, Applied, External)
+
+JOB CARDS:
+  - Company logo and information
+  - Job title and description
+  - Location, salary, experience details
+  - Skill tags
+  - Time posted indicator
+  - Action buttons (Like, Dislike, Ask AI, Apply)
+  - Match percentage panel (desktop only)
+
+FILTERING & SEARCH:
+  - Search by title or company
+  - Filter by location (Remote, New York, California, etc.)
+  - Filter by experience level
+  - Filter by salary range (slider)
+  - Filter by working schedule
+  - Filter by employment type
+  - Skill-based filtering
+  - Clear filters option
+
+AI COPILOT (ORION):
+  - Welcome message with user personalization
+  - Task suggestions (Adjust preferences, Top matches, Ask about jobs)
+  - Chat interface for job-related questions
+  - Interactive AI responses
+
+MOBILE OPTIMIZATION:
+  - Bottom navigation bar
+  - Mobile filter drawer
+  - Touch-friendly buttons (44px+ targets)
+  - Optimized spacing and typography
+  - Horizontal scrolling for filters
+  - Responsive grid layouts
+
+================================================================================
+                        API ENDPOINTS
+================================================================================
+
+FRONTEND API (src/lib/api.js):
+  - GET /api/jobs - Fetch all jobs
+  - POST /api/jobs - Create new job
+  - GET /api/jobs/:id - Get job by ID
+  - PUT /api/jobs/:id - Update job
+  - DELETE /api/jobs/:id - Delete job
+
+BACKEND ROUTES (backend/server.js):
+  - GET /api/health - Health check
+  - GET /api/jobs - Fetch jobs with filters
+  - POST /api/jobs - Create job posting
+  - GET /api/jobs/rapidapi - Fetch from RapidAPI
+  - GET /api/jobs/adzuna - Fetch from Adzuna API
+
+================================================================================
+                        DEPENDENCIES
+================================================================================
+
+CORE:
+  - react: ^18.2.0
+  - react-dom: ^18.2.0
+  - react-scripts: ^5.0.1
+
+API & DATA:
+  - axios: ^1.6.2
+  - @supabase/supabase-js: ^2.90.1
+
+ANALYTICS:
+  - @vercel/analytics: ^1.6.1
+
+TESTING:
+  - @testing-library/jest-dom: ^6.1.5
+  - @testing-library/react: ^14.1.2
+  - @testing-library/user-event: ^14.5.1
+
+================================================================================
+                        FUTURE ENHANCEMENTS
+================================================================================
+
+Potential features for future development:
+  - Resume builder integration
+  - Email notifications for new jobs
+  - Job application tracking system
+  - Company profiles and reviews
+  - Salary insights and trends
+  - Job alerts and saved searches
+  - Social sharing functionality
+  - Advanced analytics dashboard
+  - Multi-language support
+  - Dark mode theme
+
+================================================================================
+                        LICENSE & CREDITS
+================================================================================
+
+Project: DataJobPortal (Jobright)
+Version: 1.0.0
+Technology: React, Node.js, Supabase
+Design: Modern, Responsive, User-Friendly
+
+================================================================================
+END OF PROJECT DESCRIPTION
+================================================================================

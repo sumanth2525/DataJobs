@@ -47,9 +47,10 @@ const Login = ({ onLogin, onSwitchToSignUp, onClose }) => {
     
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
       // In a real app, this would call an authentication API
       const userData = {
         email: loginMethod === 'email' ? formData.email : formData.phone,
@@ -57,7 +58,12 @@ const Login = ({ onLogin, onSwitchToSignUp, onClose }) => {
         name: 'John Doe', // This would come from the API
       };
       onLogin(userData);
-    }, 1000);
+    } catch (error) {
+      setErrors({ general: 'An error occurred during login. Please try again.' });
+      console.error('Login error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (field, value) => {

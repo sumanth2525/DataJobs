@@ -1,38 +1,167 @@
 .dashboard {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8f9fa 0%, #f5f5f5 100%);
-  padding-bottom: 70px; /* Space for mobile nav */
-  animation: fadeIn 0.5s ease;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
+/* Two-Column Layout: Filters Sidebar + Main Content */
+.dashboard-layout {
+  display: flex;
+  min-height: calc(100vh - 80px);
+  margin-top: 80px; /* Header height */
+  width: 100%;
+  background: #f5f5f5;
+  padding: 24px;
+  gap: 24px;
+}
+
+/* Left Sidebar - Filters */
+.dashboard-filters-sidebar {
+  width: 320px;
+  min-height: calc(100vh - 128px);
+  flex-shrink: 0;
+}
+
+/* Main Content Area */
+.dashboard-main-content {
+  flex: 1;
+  min-height: calc(100vh - 128px);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 12px;
+}
+
+.dashboard-content-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+/* Legacy dashboard-content (keep for compatibility) */
 .dashboard-content {
-  padding: 32px 24px;
+  padding: 40px 32px;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .dashboard-right-sidebar {
+    width: 300px;
+  }
+  
+  .dashboard-main-content {
+    margin-right: 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboard-left-sidebar {
+    width: 240px;
+  }
+  
+  .dashboard-main-content {
+    margin-left: 240px;
+  }
+  
+  .dashboard-right-sidebar {
+    width: 280px;
+  }
+  
+  .dashboard-main-content {
+    margin-right: 280px;
+  }
+}
+
 @media (max-width: 1024px) {
-  .dashboard-content {
-    padding: 20px 16px;
+  .dashboard-layout {
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .dashboard-filters-sidebar {
+    display: none; /* Hide filters sidebar on tablet/mobile, use drawer instead */
+  }
+  
+  .dashboard-main-content {
+    width: 100%;
+  }
+  
+  .dashboard-content-area {
+    padding: 16px;
   }
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    padding-bottom: 70px; /* Space for mobile bottom nav */
+    padding-bottom: 80px; /* Space for mobile bottom nav */
+    background: #ffffff; /* Clean white background on mobile */
+  }
+  
+  .dashboard-layout {
+    margin-top: 60px; /* Smaller header on mobile */
+    padding: 12px 0 0 0; /* Reduced padding on mobile */
+    background: #ffffff;
+    gap: 0;
+  }
+  
+  .dashboard-main-content {
+    border-radius: 0; /* Full width on mobile */
+    box-shadow: none;
+  }
+  
+  .dashboard-content-area {
+    padding: 12px 16px;
   }
   
   .dashboard-content {
-    padding: 16px 12px;
+    padding: 12px 16px;
   }
+}
+
+@media (max-width: 480px) {
+  .dashboard-layout {
+    margin-top: 56px; /* Even smaller header for small phones */
+  }
+  
+  .dashboard-content-area {
+    padding: 8px 12px;
+  }
+}
+
+/* Scrollbar Styling */
+.dashboard-left-sidebar::-webkit-scrollbar,
+.dashboard-main-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-left-sidebar::-webkit-scrollbar-track,
+.dashboard-main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-left-sidebar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.dashboard-left-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

@@ -28,35 +28,63 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 18px 20px;
   border-bottom: 1px solid #e0e0e0;
 }
 
 .mobile-filter-header h3 {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
   color: #1a1a1a;
+}
+
+.mobile-filter-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reset-all-button {
+  background: transparent;
+  border: none;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.reset-all-button:hover {
+  background: #f0f4ff;
+  color: #5568d3;
 }
 
 .close-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   color: #666;
   cursor: pointer;
   padding: 0;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .close-button:hover {
   background-color: #f5f5f5;
+}
+
+.close-button:active {
+  transform: scale(0.9);
 }
 
 .mobile-filter-content {
@@ -108,39 +136,56 @@
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.radio-group {
+.checkbox-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
-.radio-label {
+.checkbox-label {
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 12px;
+  padding: 12px 14px;
   border-radius: 8px;
-  transition: background-color 0.2s;
-  min-height: 44px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.radio-label:hover {
-  background-color: #f5f5f5;
+.checkbox-label:hover {
+  background-color: #f8f9fa;
+  border-color: #e5e7eb;
 }
 
-.radio-input {
+.checkbox-input {
   margin-right: 12px;
   width: 20px;
   height: 20px;
   cursor: pointer;
   accent-color: #667eea;
+  transition: transform 0.2s ease;
+  border-radius: 4px;
   min-width: 20px;
+  flex-shrink: 0;
 }
 
-.radio-text {
+.checkbox-label:hover .checkbox-input {
+  transform: scale(1.1);
+}
+
+.checkbox-text {
   font-size: 14px;
-  color: #333;
+  color: #1a1a1a;
+  font-weight: 400;
   user-select: none;
+  transition: color 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-text {
+  color: #1a1a1a;
+  font-weight: 500;
 }
 
 .mobile-filter-select {
@@ -178,15 +223,49 @@
   gap: 16px;
 }
 
-.mobile-salary-display {
-  padding: 14px 16px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 700;
-  color: #667eea;
+.mobile-salary-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-salary-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  min-height: 44px;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.mobile-salary-input::-webkit-inner-spin-button,
+.mobile-salary-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mobile-salary-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.mobile-salary-separator {
+  color: #666;
+  font-weight: 600;
   font-size: 16px;
-  border: 2px solid #667eea;
+}
+
+.mobile-salary-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .mobile-salary-slider {

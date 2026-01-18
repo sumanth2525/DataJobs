@@ -1,76 +1,91 @@
 import React, { useState } from 'react';
 import './MobileNav.css';
 
-const MobileNav = ({ onNavigate }) => {
-  const [activeItem, setActiveItem] = useState('find-job');
-
+const MobileNav = ({ onNavigate, currentPage = 'home' }) => {
   const handleNavClick = (e, item) => {
     e.preventDefault();
     e.stopPropagation();
-    setActiveItem(item);
-    if (item === 'hiring' && onNavigate) {
-      onNavigate('admin');
-    } else {
-      // console.log(`Navigating to: ${item}`); // Removed by Issue Fixer Agent
-      // Show feedback for navigation
-      const navItem = e.currentTarget;
-      navItem.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        navItem.style.transform = '';
-      }, 150);
-      
-      // In a real app, this would navigate to the section
-      if (item === 'messages') {
-        if (onNavigate) {
-          onNavigate('messages');
-        } else {
-          window.location.hash = '#messages';
-        }
-      } else if (item === 'community') {
-        if (onNavigate) {
-          onNavigate('community');
-        } else {
-          window.location.hash = '#community';
-        }
-      } else if (item === 'profile') {
-        if (onNavigate) {
-          onNavigate('profile');
-        } else {
-          window.location.hash = '#profile';
-        }
+    
+    // Show feedback for navigation
+    const navItem = e.currentTarget;
+    navItem.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      navItem.style.transform = '';
+    }, 150);
+    
+    // Navigate to the section
+    if (item === 'home' || item === 'dashboard') {
+      if (onNavigate) {
+        onNavigate('dashboard');
+      } else {
+        window.location.hash = '';
+      }
+    } else if (item === 'jobs') {
+      if (onNavigate) {
+        onNavigate('dashboard');
+      } else {
+        window.location.hash = '';
+      }
+    } else if (item === 'applies' || item === 'applications') {
+      // Navigate to applications/profile or create new page
+      if (onNavigate) {
+        onNavigate('profile');
+      } else {
+        window.location.hash = '#profile';
+      }
+    } else if (item === 'inbox' || item === 'messages') {
+      if (onNavigate) {
+        onNavigate('messages');
+      } else {
+        window.location.hash = '#messages';
+      }
+    } else if (item === 'profile') {
+      if (onNavigate) {
+        onNavigate('profile');
+      } else {
+        window.location.hash = '#profile';
       }
     }
+  };
+
+  const isActive = (item) => {
+    if (item === 'home' && (currentPage === 'dashboard' || currentPage === 'home')) return true;
+    if (item === 'jobs' && currentPage === 'dashboard') return true;
+    if (item === 'applies' && currentPage === 'profile') return true;
+    if (item === 'inbox' && currentPage === 'messages') return true;
+    if (item === 'profile' && currentPage === 'profile') return true;
+    return false;
   };
 
   return (
     <nav className="mobile-nav">
       <a 
-        href="#find-job" 
-        className={`mobile-nav-item ${activeItem === 'find-job' ? 'active' : ''}`}
-        onClick={(e) => handleNavClick(e, 'find-job')}
+        href="#home" 
+        className={`mobile-nav-item ${isActive('home') ? 'active' : ''}`}
+        onClick={(e) => handleNavClick(e, 'home')}
       >
-        <i className="bi bi-search mobile-nav-icon"></i>
-        <span className="mobile-nav-label">Find Job</span>
+        <i className="bi bi-house-fill mobile-nav-icon"></i>
+        <span className="mobile-nav-label">Home</span>
       </a>
       <a 
-        href="#messages" 
-        className={`mobile-nav-item ${activeItem === 'messages' ? 'active' : ''}`}
-        onClick={(e) => handleNavClick(e, 'messages')}
+        href="#jobs" 
+        className={`mobile-nav-item ${isActive('jobs') ? 'active' : ''}`}
+        onClick={(e) => handleNavClick(e, 'jobs')}
       >
-        <i className="bi bi-chat-dots mobile-nav-icon"></i>
-        <span className="mobile-nav-label">Messages</span>
+        <i className="bi bi-briefcase-fill mobile-nav-icon"></i>
+        <span className="mobile-nav-label">Jobs</span>
       </a>
       <a 
-        href="#community" 
-        className={`mobile-nav-item ${activeItem === 'community' ? 'active' : ''}`}
-        onClick={(e) => handleNavClick(e, 'community')}
+        href="#inbox" 
+        className={`mobile-nav-item ${isActive('inbox') ? 'active' : ''}`}
+        onClick={(e) => handleNavClick(e, 'inbox')}
       >
-        <i className="bi bi-people mobile-nav-icon"></i>
-        <span className="mobile-nav-label">Community</span>
+        <i className="bi bi-bar-chart-fill mobile-nav-icon"></i>
+        <span className="mobile-nav-label">Chart</span>
       </a>
       <a 
         href="#profile" 
-        className={`mobile-nav-item ${activeItem === 'profile' ? 'active' : ''}`}
+        className={`mobile-nav-item ${isActive('profile') ? 'active' : ''}`}
         onClick={(e) => handleNavClick(e, 'profile')}
       >
         <i className="bi bi-person-fill mobile-nav-icon"></i>

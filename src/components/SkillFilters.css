@@ -1,0 +1,143 @@
+.skill-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.skill-filters-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.skill-pill {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.skill-pill:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  transform: translateY(-1px);
+}
+
+.skill-pill.active {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+.skill-pill-more {
+  padding: 8px 16px;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.skill-pill-more:hover {
+  background: #f1f5f9;
+  border-color: #10b981;
+  color: #10b981;
+  border-style: solid;
+}
+
+.edit-filters-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #10b981;
+  background: white;
+  color: #10b981;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-filters-btn:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+.edit-filters-btn i {
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .skill-filters {
+    gap: 8px;
+    padding: 12px 0;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  
+  .skill-filters::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .skill-filters-list {
+    gap: 6px;
+  }
+  
+  .skill-pill {
+    padding: 8px 14px;
+    font-size: 12px;
+    min-height: 36px; /* Better touch target */
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .skill-pill:active {
+    transform: scale(0.95);
+  }
+  
+  .skill-pill-more {
+    padding: 8px 14px;
+    font-size: 12px;
+    min-height: 36px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .skill-pill-more:active {
+    transform: scale(0.95);
+  }
+  
+  .edit-filters-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+    min-height: 36px;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  
+  .edit-filters-btn:active {
+    transform: scale(0.95);
+  }
+}

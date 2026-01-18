@@ -208,7 +208,7 @@ const Community = ({ onNavigate }) => {
                       <i className={`bi ${post.isLiked ? 'bi-heart-fill' : 'bi-heart'}`}></i>
                       <span>{post.likes}</span>
                     </button>
-                    <button className="post-action-button">
+                    <button className="post-action-button" aria-label={`Comment on post by ${post.author.name}`}>
                       <i className="bi bi-chat"></i>
                       <span>{post.comments}</span>
                     </button>

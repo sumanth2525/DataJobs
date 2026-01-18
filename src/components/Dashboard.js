@@ -1,33 +1,37 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Header from './Header';
 import SearchFilterBar from './SearchFilterBar';
 import JobListings from './JobListings';
+import FiltersSidebar from './FiltersSidebar';
 import MobileNav from './MobileNav';
 import MobileFilterDrawer from './MobileFilterDrawer';
+import MobileHome from './MobileHome';
 import FilterPanel from './FilterPanel';
 import { sampleJobs } from '../data/jobData';
+import { jobsAPI } from '../lib/api';
 import './Dashboard.css';
 
 const Dashboard = ({ jobs: propJobs, setJobs: propSetJobs, onNavigate, user, onShowLogin, onShowSignUp, onLogout }) => {
-  const [localJobs, setLocalJobs] = useState(sampleJobs);
+  const [localJobs] = useState(sampleJobs);
   const jobs = propJobs || localJobs;
-  // eslint-disable-next-line no-unused-vars
-  const setJobs = propSetJobs || setLocalJobs;
   const [filters, setFilters] = useState({
     search: '',
     workLocation: '',
     experience: '',
-    salaryRange: [1000, 50000],
-    workingSchedule: '',
-    employmentType: ''
+    salaryRange: [2500, 10000],
+    workingSchedule: [],
+    employmentType: [],
+    workStyle: [],
+    timeFilter: ''
   });
   const [appliedFilters, setAppliedFilters] = useState({
     search: '',
     workLocation: '',
     experience: '',
-    salaryRange: [1000, 50000],
-    workingSchedule: '',
-    employmentType: ''
+    salaryRange: [2500, 10000],
+    workingSchedule: [],
+    employmentType: [],
+    workStyle: []
   });
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
@@ -56,14 +60,33 @@ const Dashboard = ({ jobs: propJobs, setJobs: propSetJobs, onNavigate, user, onS
     setIsFilterDrawerOpen(false);
   };
 
+  const handleRemoveFilter = (filterName) => {
+    // Remove filter from both filters and appliedFilters
+    const updatedFilters = { ...filters };
+    const updatedAppliedFilters = { ...appliedFilters };
+    
+    if (Array.isArray(updatedFilters[filterName])) {
+      updatedFilters[filterName] = [];
+      updatedAppliedFilters[filterName] = [];
+    } else {
+      updatedFilters[filterName] = '';
+      updatedAppliedFilters[filterName] = '';
+    }
+    
+    setFilters(updatedFilters);
+    setAppliedFilters(updatedAppliedFilters);
+  };
+
   const handleClearFilters = () => {
     const clearedFilters = {
       search: '',
       workLocation: '',
       experience: '',
-      salaryRange: [1000, 50000],
-      workingSchedule: '',
-      employmentType: ''
+      salaryRange: [2500, 10000],
+      workingSchedule: [],
+      employmentType: [],
+      workStyle: [],
+      timeFilter: ''
     };
     setFilters(clearedFilters);
     setAppliedFilters(clearedFilters);
@@ -71,42 +94,76 @@ const Dashboard = ({ jobs: propJobs, setJobs: propSetJobs, onNavigate, user, onS
     setIsFilterDrawerOpen(false);
   };
 
-  // Handle time-based sorting
-  const handleSortChange = (sortValue) => {
+  // Handle time-based sorting - refetch jobs from API when filter changes
+  const handleSortChange = async (sortValue) => {
     setTimeFilter(sortValue);
+    // Also update the timeFilter in filters
+    setFilters(prev => ({ ...prev, timeFilter: sortValue }));
+    
+    // If timeFilter is a time-based filter (not salary sort), refetch from API
+    if (sortValue === 'Latest' || sortValue === 'Last 24 hours' || sortValue === 'Today' || sortValue === 'Last week' || sortValue === 'Last month') {
+      try {
+        // Fetch jobs with timeFilter from backend
+        const response = await jobsAPI.getAll({ timeFilter: sortValue });
+        
+        if (response && response.success && response.data && Array.isArray(response.data)) {
+          // Transform database format to UI format
+          const transformedJobs = response.data.map(job => ({
+            id: job.id,
+            company: job.company,
+            companyLogo: job.company_logo || job.company?.charAt(0).toUpperCase() || '?',
+            title: job.title,
+            location: job.location,
+            salary: job.salary,
+            tags: job.tags || [],
+            link: job.link,
+            description: job.description,
+            timestamp: job.created_at,
+            date: job.created_at 
+              ? new Date(job.created_at).toLocaleDateString('en-US', { 
+                  day: 'numeric', 
+                  month: 'short', 
+                  year: 'numeric' 
+                })
+              : new Date().toLocaleDateString('en-US', { 
+                  day: 'numeric', 
+                  month: 'short', 
+                  year: 'numeric' 
+                })
+          }));
+          
+          // Update jobs state if setJobs is available (from App.js)
+          if (propSetJobs) {
+            propSetJobs(transformedJobs);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching jobs with timeFilter:', error);
+        // Fall back to client-side filtering if API call fails
+      }
+    }
   };
 
   // Filter and sort jobs based on applied filters
+  // Note: Time-based filtering is handled by backend API when timeFilter changes
+  // This useMemo only handles client-side filtering for other filters (search, location, etc.)
+  // and sorting by salary (which is not a time-based filter)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const filteredJobs = useMemo(() => {
     let filtered = [...jobs];
 
-    // Time-based filtering
-    if (timeFilter && timeFilter !== 'Latest') {
-      const now = new Date();
-      let cutoffDate;
-
-      switch (timeFilter) {
-        case 'Last 24 hours':
-          cutoffDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-          break;
-        case 'Last week':
-          cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case 'Last month':
-          cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          break;
-        default:
-          cutoffDate = null;
-      }
-
-      if (cutoffDate) {
-        filtered = filtered.filter(job => {
-          if (!job.timestamp && !job.created_at) return false;
-          const jobDate = new Date(job.timestamp || job.created_at);
-          return jobDate >= cutoffDate;
-        });
-      }
-    }
+    // Time-based filtering is now handled by backend API
+    // Jobs are already filtered by backend when refetched with timeFilter parameter
+    // No need to filter by time here - backend does it correctly
 
     // Search filter
     if (appliedFilters.search) {
@@ -167,17 +224,30 @@ const Dashboard = ({ jobs: propJobs, setJobs: propSetJobs, onNavigate, user, onS
       });
     }
 
-    // Working schedule filter
-    if (appliedFilters.workingSchedule) {
+    // Working schedule filter (array of checkboxes)
+    if (appliedFilters.workingSchedule && appliedFilters.workingSchedule.length > 0) {
       filtered = filtered.filter(job => 
-        job.tags.includes(appliedFilters.workingSchedule)
+        appliedFilters.workingSchedule.some(schedule =>
+          job.tags.some(tag => tag.toLowerCase().includes(schedule.toLowerCase()) || tag.toLowerCase() === schedule.toLowerCase())
+        )
       );
     }
 
-    // Employment type filter
-    if (appliedFilters.employmentType) {
+    // Employment type filter (array of checkboxes)
+    if (appliedFilters.employmentType && appliedFilters.employmentType.length > 0) {
       filtered = filtered.filter(job => 
-        job.tags.includes(appliedFilters.employmentType)
+        appliedFilters.employmentType.some(type =>
+          job.tags.some(tag => tag.toLowerCase().includes(type.toLowerCase()) || tag.toLowerCase() === type.toLowerCase())
+        )
+      );
+    }
+
+    // Work style filter (array of checkboxes)
+    if (appliedFilters.workStyle && appliedFilters.workStyle.length > 0) {
+      filtered = filtered.filter(job => 
+        appliedFilters.workStyle.some(style =>
+          job.tags.some(tag => tag.toLowerCase().includes(style.toLowerCase()) || tag.toLowerCase() === style.toLowerCase())
+        )
       );
     }
 
@@ -214,6 +284,28 @@ const Dashboard = ({ jobs: propJobs, setJobs: propSetJobs, onNavigate, user, onS
     return filtered;
   }, [jobs, appliedFilters, timeFilter]);
 
+  // Show MobileHome on mobile, regular Dashboard on desktop
+  if (isMobile) {
+    return (
+      <div className="dashboard">
+        <MobileHome 
+          jobs={filteredJobs}
+          user={user}
+          onNavigate={onNavigate}
+          onFilterClick={() => setIsFilterDrawerOpen(true)}
+        />
+        <MobileNav onNavigate={onNavigate} currentPage="home" />
+        <MobileFilterDrawer 
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          isOpen={isFilterDrawerOpen}
+          onClose={handleApplyFilters}
+          onClear={handleClearFilters}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard">
       <Header 
@@ -223,19 +315,42 @@ const Dashboard = ({ jobs: propJobs, setJobs: propSetJobs, onNavigate, user, onS
         onShowSignUp={onShowSignUp}
         onLogout={onLogout}
       />
-      <SearchFilterBar 
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        appliedFilters={appliedFilters}
-      />
-      <div className="dashboard-content">
-        <JobListings 
-          jobs={filteredJobs} 
-          onFilterClick={handleFilterClick}
-          onSortChange={handleSortChange}
-        />
+      
+      {/* Two-Column Layout: Filters Sidebar + Main Content */}
+      <div className="dashboard-layout">
+        {/* Left Sidebar - Filters */}
+        <aside className="dashboard-filters-sidebar">
+          <FiltersSidebar 
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onClear={handleClearFilters}
+          />
+        </aside>
+
+        {/* Main Content Area */}
+        <main className="dashboard-main-content">
+          <div className="dashboard-content-area">
+            {/* Search and Active Filters */}
+            <SearchFilterBar 
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              appliedFilters={appliedFilters}
+              onRemoveFilter={handleRemoveFilter}
+            />
+
+            {/* Job Listings */}
+            <JobListings 
+              jobs={filteredJobs} 
+              onFilterClick={handleFilterClick}
+              onSortChange={handleSortChange}
+              currentSort={timeFilter}
+            />
+          </div>
+        </main>
       </div>
-      <MobileNav onNavigate={onNavigate} />
+
+      {/* Mobile Components */}
+      <MobileNav onNavigate={onNavigate} currentPage="home" />
       <FilterPanel
         filters={filters}
         onFilterChange={handleFilterChange}

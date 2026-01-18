@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import JobCard from './JobCard';
 import './JobListings.css';
 
-const JobListings = ({ jobs, onFilterClick, showFilterButton = true, onSortChange }) => {
-  const [sortBy, setSortBy] = useState('Latest');
+const JobListings = ({ jobs, onFilterClick, showFilterButton = true, onSortChange, currentSort }) => {
+  const [sortBy, setSortBy] = useState(currentSort || 'Latest');
+
+  // Update local state when currentSort prop changes
+  React.useEffect(() => {
+    if (currentSort) {
+      setSortBy(currentSort);
+    }
+  }, [currentSort]);
 
   const handleSortChange = (e) => {
     const sortValue = e.target.value;
@@ -17,7 +24,6 @@ const JobListings = ({ jobs, onFilterClick, showFilterButton = true, onSortChang
     if (onFilterClick) {
       onFilterClick();
     } else {
-      // console.log('Filter button clicked'); // Removed by Issue Fixer Agent
       alert('Filter options');
     }
   };

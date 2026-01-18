@@ -99,7 +99,6 @@ const Admin = ({ onJobPost, onNavigate }) => {
       }
     } catch (error) {
       setFetchError('Error fetching job details. Please fill the form manually.');
-      // console.error('Error parsing job URL:', error); // Removed by Issue Fixer Agent
     } finally {
       setIsFetching(false);
     }
@@ -464,6 +463,7 @@ const Admin = ({ onJobPost, onNavigate }) => {
                         type="button"
                         onClick={() => handleRemoveTag(tag)}
                         className="tag-remove"
+                        aria-label={`Remove tag ${tag}`}
                       >
                         ×
                       </button>

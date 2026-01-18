@@ -1,4 +1,6 @@
 // Utility to extract job information from URLs
+import { jobsAPI } from '../lib/api';
+
 export const parseJobUrl = async (url) => {
   if (!url || !url.trim()) {
     return null;
@@ -117,22 +119,24 @@ export const parseJobUrl = async (url) => {
       return { ...extractedData, ...response };
     }
   } catch (error) {
-    // console.log('Could not fetch additional details:', error); // Removed by Issue Fixer Agent
+    // Silently fail - user can fill form manually
   }
 
   return extractedData;
 };
 
-// Mock function - in production, this would call a backend API
+// Fetch job details using ChatGPT API
 const fetchJobDetails = async (url) => {
-  // This is a placeholder - in a real app, you'd have a backend endpoint
-  // that scrapes the job posting URL and returns structured data
-  
-  // For demonstration, we'll return null and let the user fill manually
-  // In production, you'd do something like:
-  // return await fetch('/api/scrape-job', { method: 'POST', body: JSON.stringify({ url }) })
-  
-  return null;
+  try {
+    const response = await jobsAPI.scrapeJob(url);
+    if (response.success && response.data) {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    // Silently fail - user can fill form manually
+    return null;
+  }
 };
 
 // Helper to detect if URL is from a known job board

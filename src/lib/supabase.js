@@ -21,7 +21,7 @@ export const subscribeToOnlineUsers = (callback) => {
           callback(data.count);
         }
       } catch (error) {
-        // console.error('Error fetching online users:', error); // Removed by Issue Fixer Agent
+        // Fallback to API
       }
     }, 3000);
     

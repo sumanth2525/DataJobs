@@ -54,6 +54,12 @@ const Profile = ({ onNavigate }) => {
       </div>
 
       <div className="profile-content">
+        <div style={{ textAlign: 'center', padding: '80px 20px', color: '#667eea', fontSize: '28px', fontWeight: '600' }}>
+          <i className="bi bi-hourglass-split" style={{ fontSize: '48px', marginBottom: '20px', display: 'block', color: '#667eea' }}></i>
+          Coming soon
+        </div>
+        {false && (
+        <>
         {/* Profile Header Card */}
         <div className="profile-header-card">
           <div className="profile-cover"></div>
@@ -367,7 +373,8 @@ const Profile = ({ onNavigate }) => {
             </div>
           )}
         </div>
-      </div>
+        </>
+        )}
 
       {/* Contact Us Modal */}
       {showContactModal && (
@@ -467,6 +474,7 @@ const Profile = ({ onNavigate }) => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

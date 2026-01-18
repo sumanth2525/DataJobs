@@ -64,9 +64,10 @@ const SignUp = ({ onSignUp, onSwitchToLogin, onClose }) => {
     
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
       // In a real app, this would call an authentication API
       const userData = {
         name: formData.name,
@@ -74,7 +75,12 @@ const SignUp = ({ onSignUp, onSwitchToLogin, onClose }) => {
         loginMethod: signUpMethod,
       };
       onSignUp(userData);
-    }, 1000);
+    } catch (error) {
+      setErrors({ general: 'An error occurred during sign up. Please try again.' });
+      console.error('Sign up error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (field, value) => {

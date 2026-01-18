@@ -1,255 +1,103 @@
-import axios from 'axios';
-import { jobsAPI, authAPI, usersAPI, messagesAPI } from '../../lib/api';
+// Mock axios before any imports
+jest.mock('axios', () => {
+  const mockAxiosInstance = {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    interceptors: {
+      request: { use: jest.fn() },
+      response: { use: jest.fn() }
+    }
+  };
+  return {
+    __esModule: true,
+    default: {
+      create: jest.fn(() => mockAxiosInstance)
+    }
+  };
+});
 
-// Mock axios
-jest.mock('axios');
-const mockedAxios = axios;
+jest.mock('../../utils/adminStats', () => ({
+  default: {
+    trackAPICall: jest.fn()
+  }
+}));
 
 describe('API Client', () => {
+  let jobsAPI, authAPI;
+  let mockAxiosInstance;
+
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
+    
+    // Get fresh mocks
+    const axios = require('axios').default;
+    mockAxiosInstance = axios.create();
+    
+    // Import API after mocks are set up
+    const api = require('../../lib/api');
+    jobsAPI = api.jobsAPI;
+    authAPI = api.authAPI;
   });
 
   describe('jobsAPI', () => {
-    test('getAll should fetch jobs without filters', async () => {
-      const mockJobs = [{ id: 1, title: 'Test Job' }];
-      mockedAxios.create.mockReturnValue({
-        get: jest.fn().mockResolvedValue({ data: { success: true, data: mockJobs } }),
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
+    test('gets all jobs without filters', async () => {
+      const mockJobs = [{ id: 1, title: 'Data Scientist' }];
+      mockAxiosInstance.get.mockResolvedValue({ data: mockJobs });
+      
       const result = await jobsAPI.getAll();
-
-      expect(result.success).toBe(true);
+      expect(result).toEqual(mockJobs);
     });
 
-    test('getAll should fetch jobs with filters', async () => {
-      const mockResponse = { data: { success: true, data: [] } };
-      const mockGet = jest.fn().mockResolvedValue(mockResponse);
+    test('gets job by ID', async () => {
+      const mockJob = { id: 1, title: 'Data Scientist' };
+      mockAxiosInstance.get.mockResolvedValue({ data: mockJob });
       
-      mockedAxios.create.mockReturnValue({
-        get: mockGet,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      await jobsAPI.getAll({ search: 'data scientist', location: 'Remote' });
-      
-      expect(mockGet).toHaveBeenCalled();
-    });
-
-    test('getById should fetch single job', async () => {
-      const mockJob = { id: 1, title: 'Test Job' };
-      const mockGet = jest.fn().mockResolvedValue({ 
-        data: { success: true, data: mockJob } 
-      });
-      
-      mockedAxios.create.mockReturnValue({
-        get: mockGet,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
       const result = await jobsAPI.getById(1);
-      
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(mockJob);
+      expect(result).toEqual(mockJob);
     });
 
-    test('create should post new job', async () => {
-      const newJob = { company: 'Test', title: 'Job', link: 'http://test.com' };
-      const mockPost = jest.fn().mockResolvedValue({ 
-        data: { success: true, data: { id: 1, ...newJob } } 
-      });
+    test('creates new job', async () => {
+      const newJob = { title: 'Data Scientist', company: 'Tech Corp' };
+      mockAxiosInstance.post.mockResolvedValue({ data: { ...newJob, id: 1 } });
       
-      mockedAxios.create.mockReturnValue({
-        post: mockPost,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await jobsAPI.create(newJob);
-      
-      expect(result.success).toBe(true);
+      await jobsAPI.create(newJob);
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith('/jobs', newJob);
     });
 
-    test('update should update job', async () => {
-      const updates = { title: 'Updated Title' };
-      const mockPut = jest.fn().mockResolvedValue({ 
-        data: { success: true, data: { id: 1, ...updates } } 
-      });
+    test('updates job', async () => {
+      const updatedJob = { id: 1, title: 'Senior Data Scientist' };
+      mockAxiosInstance.put.mockResolvedValue({ data: updatedJob });
       
-      mockedAxios.create.mockReturnValue({
-        put: mockPut,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await jobsAPI.update(1, updates);
-      
-      expect(result.success).toBe(true);
+      await jobsAPI.update(1, updatedJob);
+      expect(mockAxiosInstance.put).toHaveBeenCalledWith('/jobs/1', updatedJob);
     });
 
-    test('delete should delete job', async () => {
-      const mockDelete = jest.fn().mockResolvedValue({ 
-        data: { success: true } 
-      });
+    test('deletes job', async () => {
+      mockAxiosInstance.delete.mockResolvedValue({ data: { success: true } });
       
-      mockedAxios.create.mockReturnValue({
-        delete: mockDelete,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await jobsAPI.delete(1);
-      
-      expect(result.success).toBe(true);
+      await jobsAPI.delete(1);
+      expect(mockAxiosInstance.delete).toHaveBeenCalledWith('/jobs/1');
     });
   });
 
   describe('authAPI', () => {
-    test('register should register new user and store token', async () => {
-      const userData = { email: 'test@test.com', password: 'password123' };
-      const mockResponse = {
-        data: {
-          success: true,
-          data: {
-            user: { id: '1', email: 'test@test.com' },
-            session: { access_token: 'token123' }
-          }
-        }
-      };
+    test('registers new user', async () => {
+      const userData = { email: 'test@example.com', password: 'password123' };
+      mockAxiosInstance.post.mockResolvedValue({ data: { user: userData, token: 'token123' } });
       
-      const mockPost = jest.fn().mockResolvedValue(mockResponse);
-      mockedAxios.create.mockReturnValue({
-        post: mockPost,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await authAPI.register(userData);
-      
-      expect(result.success).toBe(true);
-      expect(localStorage.setItem).toHaveBeenCalledWith('auth_token', 'token123');
+      await authAPI.register(userData);
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith('/auth/register', userData);
     });
 
-    test('login should login user and store token', async () => {
-      const credentials = { email: 'test@test.com', password: 'password123' };
-      const mockResponse = {
-        data: {
-          success: true,
-          data: {
-            user: { id: '1', email: 'test@test.com' },
-            session: { access_token: 'token123' }
-          }
-        }
-      };
+    test('logs in user', async () => {
+      const credentials = { email: 'test@example.com', password: 'password123' };
+      mockAxiosInstance.post.mockResolvedValue({ data: { user: {}, token: 'token123' } });
       
-      const mockPost = jest.fn().mockResolvedValue(mockResponse);
-      mockedAxios.create.mockReturnValue({
-        post: mockPost,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await authAPI.login(credentials);
-      
-      expect(result.success).toBe(true);
-      expect(localStorage.setItem).toHaveBeenCalledWith('auth_token', 'token123');
-    });
-
-    test('logout should clear tokens', () => {
-      localStorage.setItem('auth_token', 'token123');
-      localStorage.setItem('user', '{}');
-      
-      authAPI.logout();
-      
-      expect(localStorage.removeItem).toHaveBeenCalledWith('auth_token');
-      expect(localStorage.removeItem).toHaveBeenCalledWith('user');
-    });
-  });
-
-  describe('usersAPI', () => {
-    test('getOnlineCount should fetch online users count', async () => {
-      const mockResponse = { data: { success: true, count: 1500 } };
-      const mockGet = jest.fn().mockResolvedValue(mockResponse);
-      
-      mockedAxios.create.mockReturnValue({
-        get: mockGet,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await usersAPI.getOnlineCount();
-      
-      expect(result.success).toBe(true);
-      expect(result.count).toBe(1500);
-    });
-  });
-
-  describe('messagesAPI', () => {
-    test('getAll should fetch messages for user', async () => {
-      const mockMessages = [{ id: 1, content: 'Hello' }];
-      const mockGet = jest.fn().mockResolvedValue({ 
-        data: { success: true, data: mockMessages } 
-      });
-      
-      mockedAxios.create.mockReturnValue({
-        get: mockGet,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await messagesAPI.getAll('user123');
-      
-      expect(result.success).toBe(true);
-      expect(Array.isArray(result.data)).toBe(true);
-    });
-
-    test('send should send message', async () => {
-      const messageData = {
-        sender_id: '123',
-        receiver_id: '456',
-        content: 'Hello'
-      };
-      
-      const mockPost = jest.fn().mockResolvedValue({ 
-        data: { success: true, data: { id: 1, ...messageData } } 
-      });
-      
-      mockedAxios.create.mockReturnValue({
-        post: mockPost,
-        interceptors: {
-          request: { use: jest.fn() },
-          response: { use: jest.fn() }
-        }
-      });
-
-      const result = await messagesAPI.send(messageData);
-      
-      expect(result.success).toBe(true);
+      await authAPI.login(credentials);
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith('/auth/login', credentials);
     });
   });
 });

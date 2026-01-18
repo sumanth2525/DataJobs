@@ -11,18 +11,23 @@
     "react-scripts": "5.0.1"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "^2.90.1",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
-    "@testing-library/user-event": "^14.5.1"
+    "@testing-library/user-event": "^14.5.1",
+    "dotenv": "^17.2.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "test-api": "node test-api.js",
-    "fix-errors": "node error-fixer-agent.js",
-    "fix-issues": "node issue-fixer-agent.js",
+    "test-api": "node scripts/test-api.js",
+    "test-supabase": "node scripts/test-supabase.js",
+    "fix-errors": "node scripts/error-fixer-agent.js",
+    "fix-issues": "node scripts/issue-fixer-agent.js",
+    "fix-tests": "node scripts/test-fixer-agent.js",
+    "test:fix": "node scripts/test-fixer-agent.js",
     "lint-fix": "npx eslint --fix \"src/**/*.js\" \"backend/**/*.js\" --ext .js"
   },
   "eslintConfig": {
